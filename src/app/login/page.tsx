@@ -40,24 +40,28 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full">
-        <div className="bg-card-bg rounded-lg shadow-md p-8">
+    <div className="min-h-screen mesh-bg flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
+      {/* 装饰圆形 */}
+      <div className="absolute top-20 left-20 w-40 h-40 bg-emerald-300/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-20 w-60 h-60 bg-green-200/20 rounded-full blur-3xl" />
+
+      <div className="max-w-md w-full relative z-10 animate-fade-in-up">
+        <div className="glass-strong rounded-3xl shadow-xl p-8">
           <div className="text-center mb-8">
-            <span className="text-4xl mb-4 block">📚</span>
+            <span className="text-5xl mb-4 block">📚</span>
             <h1 className="text-2xl font-bold text-gray-800">登录标准文库</h1>
-            <p className="text-gray-500 mt-2">欢迎回来</p>
+            <p className="text-gray-400 mt-2">欢迎回来</p>
           </div>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+            <div className="mb-4 p-3 bg-red-50/80 backdrop-blur border border-red-200/50 rounded-xl text-red-600 text-sm">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="username" className="block text-sm font-medium text-gray-600 mb-1.5">
                 用户名
               </label>
               <input
@@ -66,13 +70,13 @@ export default function LoginPage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-4 py-3 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
                 placeholder="请输入用户名"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-600 mb-1.5">
                 密码
               </label>
               <input
@@ -81,7 +85,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-4 py-3 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
                 placeholder="请输入密码"
               />
             </div>
@@ -89,16 +93,16 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 btn-sheen bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? '登录中...' : '登录'}
             </button>
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-400 text-sm">
               还没有账号？{' '}
-              <Link href="/register" className="text-primary hover:text-primary-dark font-medium">
+              <Link href="/register" className="text-primary hover:text-primary-dark font-medium transition-colors duration-200">
                 立即注册
               </Link>
             </p>

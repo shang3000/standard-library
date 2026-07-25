@@ -9,51 +9,30 @@ interface PaginationProps {
 }
 
 export default function Pagination({ currentPage, totalPages, baseUrl }: PaginationProps) {
-  // 生成页码数组
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
-    const maxVisible = 7; // 显示最多7个页码
+    const maxVisible = 7;
 
     if (totalPages <= maxVisible) {
-      // 总页数少于最大可见数，显示所有页码
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
-      // 始终显示第一页
       pages.push(1);
-
-      // 计算显示范围：当前页前3后3
       let start = Math.max(2, currentPage - 3);
       let end = Math.min(totalPages - 1, currentPage + 3);
 
-      // 调整范围，确保显示足够的页码
       if (currentPage <= 4) {
-        // 当前页靠近开头，显示更多后面的页码
         start = 2;
         end = Math.min(totalPages - 1, 6);
       } else if (currentPage >= totalPages - 3) {
-        // 当前页靠近结尾，显示更多前面的页码
         start = Math.max(2, totalPages - 5);
         end = totalPages - 1;
       }
 
-      // 添加省略号（如果需要）
-      if (start > 2) {
-        pages.push('...');
-      }
-
-      // 添加中间页码
-      for (let i = start; i <= end; i++) {
-        pages.push(i);
-      }
-
-      // 添加省略号（如果需要）
-      if (end < totalPages - 1) {
-        pages.push('...');
-      }
-
-      // 始终显示最后一页
+      if (start > 2) pages.push('...');
+      for (let i = start; i <= end; i++) pages.push(i);
+      if (end < totalPages - 1) pages.push('...');
       pages.push(totalPages);
     }
 
@@ -62,36 +41,43 @@ export default function Pagination({ currentPage, totalPages, baseUrl }: Paginat
 
   if (totalPages <= 1) return null;
 
-  // 构建基础 URL（处理已有的查询参数）
   const buildUrl = (page: number) => {
     const separator = baseUrl.includes('?') ? '&' : '?';
     return `${baseUrl}${separator}page=${page}`;
   };
 
   return (
-    <div className="flex items-center justify-center space-x-1 mt-8">
-      {/* 上一页 */}
-      {currentPage > 1 && (
+    <div className="flex items-center justify-center gap-2 mt-8">
+      {/* 上一页箭头 */}
+      {currentPage > 1 ? (
         <Link
           href={buildUrl(currentPage - 1)}
-          className="px-3 py-2 rounded-lg bg-white text-gray-700 hover:bg-primary hover:text-white transition-colors duration-200 text-sm"
+          className="w-10 h-10 rounded-full bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-600 flex items-center justify-center transition-all duration-200"
         >
-          上一页
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
         </Link>
+      ) : (
+        <div className="w-10 h-10 rounded-full bg-gray-50 text-gray-300 flex items-center justify-center cursor-not-allowed">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </div>
       )}
 
       {/* 页码 */}
       {getPageNumbers().map((page, index) => (
         <span key={index}>
           {page === '...' ? (
-            <span className="px-2 py-2 text-gray-500 text-sm">...</span>
+            <span className="w-10 h-10 flex items-center justify-center text-gray-400 text-sm">...</span>
           ) : (
             <Link
               href={buildUrl(page as number)}
-              className={`px-3 py-2 rounded-lg text-sm transition-colors duration-200 ${
+              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-200 ${
                 currentPage === page
-                  ? 'bg-primary text-white cursor-default'
-                  : 'bg-white text-gray-700 hover:bg-primary hover:text-white'
+                  ? 'bg-emerald-500 text-white shadow-md'
+                  : 'bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700'
               }`}
               aria-current={currentPage === page ? 'page' : undefined}
             >
@@ -101,14 +87,22 @@ export default function Pagination({ currentPage, totalPages, baseUrl }: Paginat
         </span>
       ))}
 
-      {/* 下一页 */}
-      {currentPage < totalPages && (
+      {/* 下一页箭头 */}
+      {currentPage < totalPages ? (
         <Link
           href={buildUrl(currentPage + 1)}
-          className="px-3 py-2 rounded-lg bg-white text-gray-700 hover:bg-primary hover:text-white transition-colors duration-200 text-sm"
+          className="w-10 h-10 rounded-full bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-600 flex items-center justify-center transition-all duration-200"
         >
-          下一页
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
         </Link>
+      ) : (
+        <div className="w-10 h-10 rounded-full bg-gray-50 text-gray-300 flex items-center justify-center cursor-not-allowed">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
       )}
     </div>
   );

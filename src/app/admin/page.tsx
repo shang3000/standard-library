@@ -168,23 +168,26 @@ export default function AdminPage() {
   // 登录页面
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
+      <div className="min-h-screen mesh-bg flex items-center justify-center relative">
+        <div className="absolute top-20 left-20 w-40 h-40 bg-emerald-300/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-20 w-60 h-60 bg-green-200/20 rounded-full blur-3xl" />
+
+        <div className="max-w-md w-full glass-strong rounded-3xl shadow-xl p-8 relative z-10 animate-fade-in-up">
           <div className="text-center mb-8">
-            <span className="text-4xl mb-4 block">🔐</span>
+            <span className="text-5xl mb-4 block">🔐</span>
             <h1 className="text-2xl font-bold text-gray-800">后台管理</h1>
-            <p className="text-gray-500 mt-2">请输入管理员密码</p>
+            <p className="text-gray-400 mt-2">请输入管理员密码</p>
           </div>
 
           {authError && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+            <div className="mb-4 p-3 bg-red-50/80 backdrop-blur border border-red-200/50 rounded-xl text-red-600 text-sm">
               {authError}
             </div>
           )}
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-600 mb-1.5">
                 管理密码
               </label>
               <input
@@ -193,14 +196,14 @@ export default function AdminPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-4 py-3 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
                 placeholder="请输入管理员密码"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full py-3 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors duration-200"
+              className="w-full py-3 btn-sheen bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               登录
             </button>
@@ -212,17 +215,17 @@ export default function AdminPage() {
 
   // 主管理界面
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen mesh-bg">
       {/* 顶部导航 */}
-      <div className="bg-white shadow-sm">
+      <div className="glass-strong shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <span className="text-2xl">⚙️</span>
-              <span className="text-xl font-bold text-gray-800">后台管理</span>
+              <span className="text-xl font-bold text-gradient">后台管理</span>
             </div>
             <div className="flex items-center space-x-4">
-              <a href="/" className="text-gray-600 hover:text-gray-800 text-sm">
+              <a href="/" className="text-gray-500 hover:text-primary-dark transition-colors duration-200 text-sm">
                 返回前台
               </a>
               <button
@@ -230,7 +233,7 @@ export default function AdminPage() {
                   sessionStorage.removeItem('admin_auth');
                   setIsAuthenticated(false);
                 }}
-                className="text-red-600 hover:text-red-800 text-sm"
+                className="text-red-400 hover:text-red-600 transition-colors duration-200 text-sm"
               >
                 退出
               </button>
@@ -243,10 +246,10 @@ export default function AdminPage() {
       {message.text && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
           <div
-            className={`p-4 rounded-lg ${
+            className={`p-4 rounded-2xl ${
               message.type === 'success'
-                ? 'bg-green-50 text-green-800 border border-green-200'
-                : 'bg-red-50 text-red-800 border border-red-200'
+                ? 'glass text-emerald-600 border border-emerald-200/50'
+                : 'bg-red-50/80 backdrop-blur text-red-600 border border-red-200/50'
             }`}
           >
             {message.text}
@@ -256,38 +259,25 @@ export default function AdminPage() {
 
       {/* 标签页导航 */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-        <div className="border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8">
-            <button
-              onClick={() => setActiveTab('documents')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'documents'
-                  ? 'border-primary text-primary'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              📄 文档管理
-            </button>
-            <button
-              onClick={() => setActiveTab('add-doc')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'add-doc'
-                  ? 'border-primary text-primary'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              ➕ 添加文档
-            </button>
-            <button
-              onClick={() => setActiveTab('users')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'users'
-                  ? 'border-primary text-primary'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              👥 用户管理
-            </button>
+        <div className="border-b border-white/30">
+          <nav className="-mb-px flex space-x-4">
+            {[
+              { key: 'documents' as const, icon: '📄', label: '文档管理' },
+              { key: 'add-doc' as const, icon: '➕', label: '添加文档' },
+              { key: 'users' as const, icon: '👥', label: '用户管理' },
+            ].map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`py-4 px-4 border-b-2 font-medium text-sm rounded-t-lg transition-all duration-200 ${
+                  activeTab === tab.key
+                    ? 'border-primary text-primary bg-primary/5'
+                    : 'border-transparent text-gray-400 hover:text-gray-600 hover:border-gray-300'
+                }`}
+              >
+                {tab.icon} {tab.label}
+              </button>
+            ))}
           </nav>
         </div>
       </div>
@@ -296,9 +286,9 @@ export default function AdminPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* 文档列表 */}
         {activeTab === 'documents' && (
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-800">
+          <div className="glass-strong rounded-2xl overflow-hidden shadow-lg">
+            <div className="px-6 py-4 border-b border-white/30">
+              <h2 className="text-lg font-semibold text-gray-700">
                 文档列表 ({documents.length})
               </h2>
             </div>
@@ -306,46 +296,46 @@ export default function AdminPage() {
               <div className="p-8 text-center text-gray-500">加载中...</div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                <table className="min-w-full divide-y divide-white/20">
+                  <thead>
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                         ID
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                         标题
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                         分类
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                         格式
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                         价格
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                         下载
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                         操作
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="divide-y divide-white/20">
                     {documents.map((doc) => (
-                      <tr key={doc.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <tr key={doc.id} className="hover:bg-white/20 transition-colors duration-200">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                           {doc.id}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             {doc.isVip && (
-                              <span className="mr-2 px-2 py-0.5 text-xs font-medium bg-yellow-100 text-yellow-800 rounded">
+                              <span className="mr-2 px-2 py-0.5 text-xs font-medium bg-gradient-to-r from-yellow-400 to-amber-500 text-white rounded-full">
                                 VIP
                               </span>
                             )}
-                            <span className="text-sm font-medium text-gray-900">
+                            <span className="text-sm font-medium text-gray-700">
                               {doc.title}
                             </span>
                           </div>
@@ -354,13 +344,13 @@ export default function AdminPage() {
                           {doc.category}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded">
+                          <span className="px-2 py-1 text-xs font-medium bg-primary/10 text-primary-dark rounded-full">
                             {doc.format}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {doc.priceStars === 0 ? (
-                            <span className="text-green-600">免费</span>
+                            <span className="text-emerald-500 font-medium">免费</span>
                           ) : (
                             <span>⭐ {doc.priceStars}</span>
                           )}
@@ -371,7 +361,7 @@ export default function AdminPage() {
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <button
                             onClick={() => handleDeleteDocument(doc.id)}
-                            className="text-red-600 hover:text-red-900"
+                            className="text-red-400 hover:text-red-600 transition-colors duration-200"
                           >
                             删除
                           </button>
@@ -387,12 +377,12 @@ export default function AdminPage() {
 
         {/* 添加文档 */}
         {activeTab === 'add-doc' && (
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-lg font-semibold text-gray-800 mb-6">添加新文档</h2>
-            <form onSubmit={handleAddDocument} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="glass-strong rounded-2xl p-6 shadow-lg">
+            <h2 className="text-lg font-semibold text-gray-700 mb-6">添加新文档</h2>
+            <form onSubmit={handleAddDocument} className="space-y-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-600 mb-1.5">
                     文档标题 *
                   </label>
                   <input
@@ -400,19 +390,19 @@ export default function AdminPage() {
                     value={newDoc.title}
                     onChange={(e) => setNewDoc({ ...newDoc, title: e.target.value })}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2.5 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
                     placeholder="输入文档标题"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-600 mb-1.5">
                     分类
                   </label>
                   <select
                     value={newDoc.category}
                     onChange={(e) => setNewDoc({ ...newDoc, category: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2.5 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200"
                   >
                     <option value="行业标准">行业标准</option>
                     <option value="国家标准">国家标准</option>
@@ -424,13 +414,13 @@ export default function AdminPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-600 mb-1.5">
                     格式
                   </label>
                   <select
                     value={newDoc.format}
                     onChange={(e) => setNewDoc({ ...newDoc, format: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2.5 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200"
                   >
                     <option value="PDF">PDF</option>
                     <option value="DOC">DOC</option>
@@ -440,7 +430,7 @@ export default function AdminPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-600 mb-1.5">
                     页数
                   </label>
                   <input
@@ -448,25 +438,25 @@ export default function AdminPage() {
                     value={newDoc.pages}
                     onChange={(e) => setNewDoc({ ...newDoc, pages: Number(e.target.value) })}
                     min="0"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2.5 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-600 mb-1.5">
                     文件大小
                   </label>
                   <input
                     type="text"
                     value={newDoc.fileSize}
                     onChange={(e) => setNewDoc({ ...newDoc, fileSize: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2.5 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
                     placeholder="例如: 3.5MB"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-600 mb-1.5">
                     价格（星币）
                   </label>
                   <input
@@ -474,20 +464,20 @@ export default function AdminPage() {
                     value={newDoc.priceStars}
                     onChange={(e) => setNewDoc({ ...newDoc, priceStars: Number(e.target.value) })}
                     min="0"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2.5 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-600 mb-1.5">
                   描述
                 </label>
                 <textarea
                   value={newDoc.description}
                   onChange={(e) => setNewDoc({ ...newDoc, description: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-2.5 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
                   placeholder="输入文档描述"
                 />
               </div>
@@ -500,7 +490,7 @@ export default function AdminPage() {
                   onChange={(e) => setNewDoc({ ...newDoc, isVip: e.target.checked })}
                   className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
                 />
-                <label htmlFor="isVip" className="ml-2 block text-sm text-gray-900">
+                <label htmlFor="isVip" className="ml-2 block text-sm text-gray-600">
                   VIP 专享文档
                 </label>
               </div>
@@ -509,7 +499,7 @@ export default function AdminPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-6 py-2 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors duration-200 disabled:opacity-50"
+                  className="px-6 py-2.5 btn-sheen bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50"
                 >
                   {loading ? '添加中...' : '添加文档'}
                 </button>
@@ -520,43 +510,43 @@ export default function AdminPage() {
 
         {/* 用户列表 */}
         {activeTab === 'users' && (
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-800">
+          <div className="glass-strong rounded-2xl overflow-hidden shadow-lg">
+            <div className="px-6 py-4 border-b border-white/30">
+              <h2 className="text-lg font-semibold text-gray-700">
                 用户列表 ({users.length})
               </h2>
             </div>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-white/20">
+                <thead>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                       ID
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                       用户名
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                       邮箱
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                       VIP
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                       星币
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                       注册时间
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="divide-y divide-white/20">
                   {users.map((user) => (
-                    <tr key={user.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <tr key={user.id} className="hover:bg-white/20 transition-colors duration-200">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                         {user.id}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700">
                         {user.username}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -564,11 +554,11 @@ export default function AdminPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {user.isVip ? (
-                          <span className="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded">
+                          <span className="px-2 py-1 text-xs font-medium bg-gradient-to-r from-yellow-400 to-amber-500 text-white rounded-full">
                             VIP
                           </span>
                         ) : (
-                          <span className="text-sm text-gray-500">普通</span>
+                          <span className="text-sm text-gray-400">普通</span>
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

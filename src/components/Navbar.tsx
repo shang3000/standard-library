@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import UserMenu from './UserMenu';
 
 const navItems = [
@@ -14,30 +15,48 @@ const navItems = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav className="bg-white sticky top-0 z-50 border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <span className="text-2xl">📚</span>
-              <span className="text-xl font-bold text-primary-dark">标准文库</span>
+            <Link href="/" className="flex items-center space-x-2 group">
+              <div className="w-9 h-9 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center shadow-sm">
+                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+              </div>
+              <div className="hidden sm:block">
+                <span className="text-lg font-bold text-gray-800 block leading-tight">标准文库</span>
+                <span className="text-[10px] text-gray-400 leading-none">专业标准文档分享平台</span>
+              </div>
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-gray-700 hover:text-primary-dark transition-colors duration-200 font-medium"
-              >
-                {item.name}
-              </Link>
-            ))}
+          <div className="hidden md:flex items-center space-x-1">
+            {navItems.map((item) => {
+              const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`px-4 py-2 font-medium transition-all duration-200 relative ${
+                    isActive
+                      ? 'text-primary-dark'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  {item.name}
+                  {isActive && (
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full" />
+                  )}
+                </Link>
+              );
+            })}
           </div>
 
           {/* User Menu */}
@@ -49,7 +68,7 @@ export default function Navbar() {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-700 hover:text-primary-dark focus:outline-none"
+              className="text-gray-600 hover:text-primary-dark p-2 rounded-lg hover:bg-primary/10 transition-all duration-200 focus:outline-none"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {isOpen ? (
@@ -64,25 +83,34 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Navigation */}
-      {isOpen && (
-        <div className="md:hidden bg-white border-t">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            {navItems.map((item) => (
+      <div
+        className={`md:hidden glass-strong border-t border-white/30 overflow-hidden transition-all duration-300 ${
+          isOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <div className="px-2 pt-2 pb-3 space-y-1">
+          {navItems.map((item) => {
+            const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+            return (
               <Link
                 key={item.name}
                 href={item.href}
-                className="block px-3 py-2 text-gray-700 hover:text-primary-dark hover:bg-gray-50 rounded-md transition-colors duration-200"
+                className={`block px-3 py-2 rounded-lg transition-all duration-200 ${
+                  isActive
+                    ? 'text-primary-dark bg-primary/10 font-medium'
+                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                }`}
                 onClick={() => setIsOpen(false)}
               >
                 {item.name}
               </Link>
-            ))}
-            <div className="border-t pt-2 mt-2">
-              <UserMenu />
-            </div>
+            );
+          })}
+          <div className="border-t border-gray-100 pt-2 mt-2">
+            <UserMenu />
           </div>
         </div>
-      )}
+      </div>
     </nav>
   );
 }

@@ -46,3 +46,4 @@ data/*.sqlite
 
 # temp files
 *.txt
+*.html

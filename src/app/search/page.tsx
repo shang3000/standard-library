@@ -27,11 +27,12 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const totalPages = Math.ceil(results.total / pageSize);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen mesh-bg">
       {/* Search Header */}
-      <div className="bg-gradient-to-r from-primary to-primary-dark py-8">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-2xl font-bold text-white mb-4">搜索文档</h1>
+      <div className="py-10 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-emerald-300/20 rounded-full blur-3xl" />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <h1 className="text-2xl font-bold text-gradient mb-4">搜索文档</h1>
           <SearchBar large placeholder="搜索标准文档..." />
         </div>
       </div>
@@ -40,19 +41,21 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         {/* Search Results */}
         {query ? (
           <>
-            <div className="mb-6 flex items-center justify-between">
-              <p className="text-gray-600">
+            <div className="mb-6 flex items-center justify-between animate-fade-in">
+              <p className="text-gray-500">
                 搜索 &quot;<span className="font-bold text-primary-dark">{query}</span>&quot; 找到{' '}
                 <span className="font-bold text-primary-dark">{results.total}</span> 份文档
               </p>
-              <span className="text-sm text-gray-500">耗时 {searchTime}ms</span>
+              <span className="text-sm text-gray-400">耗时 {searchTime}ms</span>
             </div>
 
             {results.documents.length > 0 ? (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                  {results.documents.map((doc) => (
-                    <DocumentCard key={doc.id} doc={doc} />
+                  {results.documents.map((doc, index) => (
+                    <div key={doc.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 0.05}s` }}>
+                      <DocumentCard doc={doc} />
+                    </div>
                   ))}
                 </div>
 
@@ -65,20 +68,20 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 )}
               </>
             ) : (
-              <div className="text-center py-16">
+              <div className="text-center py-16 animate-fade-in">
                 <span className="text-6xl mb-4 block">🔍</span>
-                <h3 className="text-xl font-medium text-gray-800 mb-2">未找到相关文档</h3>
-                <p className="text-gray-500 mb-6">试试其他关键词，或者浏览我们的分类文档</p>
+                <h3 className="text-xl font-medium text-gray-700 mb-2">未找到相关文档</h3>
+                <p className="text-gray-400 mb-6">试试其他关键词，或者浏览我们的分类文档</p>
                 <div className="flex items-center justify-center gap-4">
                   <Link
                     href="/"
-                    className="inline-block px-6 py-3 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors duration-200"
+                    className="inline-block px-6 py-3 btn-sheen bg-gradient-to-r from-primary to-primary-dark text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
                   >
                     返回首页
                   </Link>
                   <Link
                     href="/category/行业标准"
-                    className="inline-block px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg border transition-colors duration-200"
+                    className="inline-block px-6 py-3 glass text-gray-600 font-medium rounded-xl transition-all duration-300 hover:bg-white/60"
                   >
                     浏览分类
                   </Link>
@@ -87,10 +90,10 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             )}
           </>
         ) : (
-          <div className="text-center py-16">
+          <div className="text-center py-16 animate-fade-in">
             <span className="text-6xl mb-4 block">📝</span>
-            <h3 className="text-xl font-medium text-gray-800 mb-2">请输入搜索关键词</h3>
-            <p className="text-gray-500">搜索行业标准、国家标准、国际标准等文档</p>
+            <h3 className="text-xl font-medium text-gray-700 mb-2">请输入搜索关键词</h3>
+            <p className="text-gray-400">搜索行业标准、国家标准、国际标准等文档</p>
           </div>
         )}
       </div>

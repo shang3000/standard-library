@@ -2,61 +2,43 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-800 text-white mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Logo and Description */}
-          <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center space-x-2 mb-4">
-              <span className="text-2xl">📚</span>
-              <span className="text-xl font-bold">标准文库</span>
+    <footer className="bg-white border-t border-gray-100 mt-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          {/* Logo */}
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center">
+              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
             </div>
-            <p className="text-gray-300 text-sm leading-relaxed">
-              标准文库是一个专业的标准文档分享平台，提供行业标准、国家标准、国际标准等各类标准文档的查阅与下载服务。
-            </p>
+            <div>
+              <span className="font-bold text-gray-800">标准文库</span>
+              <p className="text-[10px] text-gray-400">专业标准文档分享平台</p>
+            </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">快速链接</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/" className="text-gray-300 hover:text-white transition-colors duration-200 text-sm">
-                  首页
-                </Link>
-              </li>
-              <li>
-                <Link href="/category/行业标准" className="text-gray-300 hover:text-white transition-colors duration-200 text-sm">
-                  行业标准
-                </Link>
-              </li>
-              <li>
-                <Link href="/category/国家标准" className="text-gray-300 hover:text-white transition-colors duration-200 text-sm">
-                  国家标准
-                </Link>
-              </li>
-              <li>
-                <Link href="/category/国际标准" className="text-gray-300 hover:text-white transition-colors duration-200 text-sm">
-                  国际标准
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {/* Nav Links */}
+          <nav className="flex items-center gap-6">
+            <Link href="/" className="text-sm text-gray-500 hover:text-emerald-600 transition-colors duration-200">
+              首页
+            </Link>
+            <Link href="/category/行业标准" className="text-sm text-gray-500 hover:text-emerald-600 transition-colors duration-200">
+              行业标准
+            </Link>
+            <Link href="/category/国家标准" className="text-sm text-gray-500 hover:text-emerald-600 transition-colors duration-200">
+              国家标准
+            </Link>
+            <Link href="/category/国际标准" className="text-sm text-gray-500 hover:text-emerald-600 transition-colors duration-200">
+              国际标准
+            </Link>
+            <Link href="/about" className="text-sm text-gray-500 hover:text-emerald-600 transition-colors duration-200">
+              关于我们
+            </Link>
+          </nav>
 
-          {/* Contact Info */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">联系我们</h3>
-            <ul className="space-y-2 text-gray-300 text-sm">
-              <li>📧 contact@standard-library.com</li>
-              <li>📞 400-123-4567</li>
-              <li>📍 北京市海淀区中关村大街1号</li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Copyright */}
-        <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
-          <p>© 2024 标准文库. All rights reserved.</p>
+          {/* Copyright */}
+          <p className="text-sm text-gray-400">© 2024 标准文库. All rights reserved.</p>
         </div>
       </div>
     </footer>

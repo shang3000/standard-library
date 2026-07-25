@@ -54,16 +54,16 @@ export default function UserMenu() {
 
   if (!user) {
     return (
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-3">
         <Link
           href="/login"
-          className="text-gray-700 hover:text-primary-dark transition-colors duration-200 font-medium text-sm"
+          className="text-gray-500 hover:text-gray-700 transition-colors duration-200 font-medium text-sm"
         >
           登录
         </Link>
         <Link
           href="/register"
-          className="px-4 py-2 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors duration-200 text-sm"
+          className="px-5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-full transition-all duration-200 text-sm shadow-sm"
         >
           注册
         </Link>
@@ -72,43 +72,57 @@ export default function UserMenu() {
   }
 
   return (
-    <div className="relative">
-      <button
-        onClick={() => setShowMenu(!showMenu)}
-        className="flex items-center space-x-3 focus:outline-none"
+    <div className="flex items-center gap-3">
+      {/* 我的文档按钮 */}
+      <Link
+        href="/profile"
+        className="hidden sm:flex items-center gap-2 px-4 py-2 border border-emerald-500 text-emerald-600 hover:bg-emerald-50 rounded-full transition-all duration-200 text-sm font-medium"
       >
-        {user.isVip && (
-          <span className="px-2 py-0.5 rounded bg-yellow-100 text-yellow-700 text-xs font-medium">
-            VIP
-          </span>
-        )}
-        <div className="flex items-center space-x-1">
-          <span className="text-yellow-500">⭐</span>
-          <span className="text-sm font-medium text-gray-700">{user.starsBalance}</span>
-        </div>
-        <span className="text-sm font-medium text-gray-700">{user.username}</span>
-        <svg className="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
-      </button>
+        我的文档
+      </Link>
 
-      {showMenu && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50">
-          <Link
-            href="/profile"
-            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            onClick={() => setShowMenu(false)}
-          >
-            个人中心
-          </Link>
-          <button
-            onClick={handleLogout}
-            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-          >
-            退出登录
-          </button>
-        </div>
-      )}
+      {/* 用户菜单 */}
+      <div className="relative">
+        <button
+          onClick={() => setShowMenu(!showMenu)}
+          className="flex items-center space-x-2 px-3 py-2 rounded-full hover:bg-gray-100 transition-all duration-200 focus:outline-none"
+        >
+          {user.isVip && (
+            <span className="px-2 py-0.5 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 text-white text-xs font-medium shadow-sm">
+              VIP
+            </span>
+          )}
+          <div className="flex items-center space-x-1">
+            <span className="text-yellow-400">⭐</span>
+            <span className="text-sm font-medium text-gray-600">{user.starsBalance}</span>
+          </div>
+          <span className="text-sm font-medium text-gray-600">{user.username}</span>
+          <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        {showMenu && (
+          <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50 overflow-hidden">
+            <Link
+              href="/profile"
+              className="block px-4 py-2.5 text-sm text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 transition-all duration-200"
+              onClick={() => setShowMenu(false)}
+            >
+              个人中心
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="block w-full text-left px-4 py-2.5 text-sm text-gray-600 hover:bg-red-50 hover:text-red-500 transition-all duration-200"
+            >
+              退出登录
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

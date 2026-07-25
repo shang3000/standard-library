@@ -207,6 +207,44 @@ export async function getPopularDocuments(limit: number = 10): Promise<Document[
   return result[0].values.map(mapRowToDocument);
 }
 
+// 获取文档统计信息
+export async function getDocumentStats(): Promise<{
+  totalDocs: number;
+  totalCategories: number;
+  totalUsers: number;
+  totalDownloads: number;
+  todayNewDocs: number;
+  todayUpdates: number;
+}> {
+  const db = await getDb();
+
+  const docsResult = db.exec('SELECT COUNT(*) FROM documents');
+  const catsResult = db.exec('SELECT COUNT(*) FROM categories');
+  const usersResult = db.exec('SELECT COUNT(*) FROM users');
+  const downloadsResult = db.exec('SELECT COALESCE(SUM(download_count), 0) FROM documents');
+
+  // 今日新增：上传时间为今天的文档数
+  const today = new Date().toISOString().split('T')[0];
+  const todayNewResult = db.exec(
+    "SELECT COUNT(*) FROM documents WHERE upload_time LIKE ?",
+    [`${today}%`]
+  );
+
+  // 今日更新：下载次数 > 0 的文档数（模拟活跃度）
+  const todayUpdatesResult = db.exec(
+    "SELECT COUNT(*) FROM documents WHERE download_count > 0"
+  );
+
+  return {
+    totalDocs: docsResult[0]?.values[0]?.[0] as number || 0,
+    totalCategories: catsResult[0]?.values[0]?.[0] as number || 0,
+    totalUsers: usersResult[0]?.values[0]?.[0] as number || 0,
+    totalDownloads: downloadsResult[0]?.values[0]?.[0] as number || 0,
+    todayNewDocs: todayNewResult[0]?.values[0]?.[0] as number || 0,
+    todayUpdates: todayUpdatesResult[0]?.values[0]?.[0] as number || 0,
+  };
+}
+
 // 辅助函数：将数据库行映射为 Document 对象
 function mapRowToDocument(row: any[]): Document {
   return {

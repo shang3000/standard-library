@@ -76,33 +76,33 @@ export default function DownloadButton({ docId, price, isVip }: DownloadButtonPr
       <button
         onClick={handleDownload}
         disabled={loading || isDisabled || !!insufficientStars}
-        className={`w-full md:w-auto px-8 py-3 font-medium rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg ${
+        className={`w-full md:w-auto px-8 py-3 font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl ${
           isDisabled
-            ? 'bg-gray-400 cursor-not-allowed text-white'
+            ? 'bg-gray-300 cursor-not-allowed text-gray-500'
             : insufficientStars
-            ? 'bg-gray-400 cursor-not-allowed text-white'
-            : 'bg-primary hover:bg-primary-dark text-white'
+            ? 'bg-gray-300 cursor-not-allowed text-gray-500'
+            : 'btn-sheen bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white'
         }`}
       >
         {loading ? '下载中...' : isDisabled ? 'VIP 专享' : insufficientStars ? '星币不足' : '立即下载'}
       </button>
 
       {error && (
-        <p className="mt-2 text-sm text-red-600">{error}</p>
+        <p className="mt-2 text-sm text-red-400">{error}</p>
       )}
 
       {success && (
-        <p className="mt-2 text-sm text-green-600">{success}</p>
+        <p className="mt-2 text-sm text-emerald-500">{success}</p>
       )}
 
       {isVip && !user?.isVip && (
-        <p className="mt-2 text-sm text-yellow-600">
+        <p className="mt-2 text-sm text-yellow-500">
           这是 VIP 专享文档，开通 VIP 即可免费下载
         </p>
       )}
 
       {needsStars && user && !insufficientStars && (
-        <p className="mt-2 text-sm text-gray-500">
+        <p className="mt-2 text-sm text-gray-400">
           下载将扣除 {price} 星币，当前余额 {user.starsBalance} 星币
         </p>
       )}

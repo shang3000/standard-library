@@ -1,6 +1,6 @@
 # 标准文库 - 专业标准文档分享平台
 
-一个基于 Next.js 14 构建的标准文档分享网站，提供行业标准、国家标准、国际标准等各类标准文档的查阅与下载服务。
+一个基于 Next.js 16 构建的标准文档分享网站，提供行业标准、国家标准、国际标准等各类标准文档的查阅与下载服务。
 
 ## ✨ 功能特性
 
@@ -22,7 +22,7 @@
 
 ## 🛠️ 技术栈
 
-- **框架**: Next.js 14 (App Router)
+- **框架**: Next.js 16 (App Router)
 - **语言**: TypeScript
 - **样式**: Tailwind CSS v4
 - **数据库**: SQLite (sql.js - 纯JS实现，无需编译)
@@ -76,6 +76,7 @@ npm run dev
 standard-library/
 ├── src/
 │   ├── app/
+│   │   ├── about/           # 关于我们页面
 │   │   ├── admin/           # 后台管理页面
 │   │   ├── api/             # API 路由
 │   │   │   ├── admin/       # 后台管理 API
@@ -98,6 +99,7 @@ standard-library/
 │   └── types/               # TypeScript 类型定义
 ├── data/                    # SQLite 数据库文件
 ├── public/                  # 静态资源
+│   └── images/              # 背景图片
 ├── .env.example             # 环境变量示例
 ├── .env.local               # 环境变量（不提交到Git）
 └── package.json
