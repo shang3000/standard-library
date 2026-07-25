@@ -4,6 +4,8 @@ import Pagination from '@/components/Pagination';
 import SearchBar from '@/components/SearchBar';
 import { searchDocuments } from '@/lib/queries';
 
+export const dynamic = 'force-dynamic';
+
 interface SearchPageProps {
   searchParams: Promise<{ q?: string; page?: string }>;
 }

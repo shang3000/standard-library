@@ -6,6 +6,8 @@ import CategoryFilter from '@/components/CategoryFilter';
 import { getCategories, getDocumentsByCategory } from '@/lib/queries';
 import { DocFormat } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ page?: string; format?: string; free?: string; vip?: string; sort?: string }>;

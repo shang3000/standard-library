@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { getCategories, getLatestDocuments, getDocumentStats } from '@/lib/queries';
 
+export const dynamic = 'force-dynamic';
+
 // 分类对应的颜色
 const categoryColors: Record<string, { bg: string; icon: string; arrow: string }> = {
   '行业标准': { bg: 'bg-emerald-100', icon: 'text-emerald-600', arrow: 'text-emerald-400' },

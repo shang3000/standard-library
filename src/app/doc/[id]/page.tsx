@@ -4,6 +4,8 @@ import DocumentCard from '@/components/DocumentCard';
 import DownloadButton from '@/components/DownloadButton';
 import { getDocumentById, getRelatedDocuments } from '@/lib/queries';
 
+export const dynamic = 'force-dynamic';
+
 interface DocDetailPageProps {
   params: Promise<{ id: string }>;
 }
