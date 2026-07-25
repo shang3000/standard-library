@@ -34,16 +34,13 @@ yarn-error.log*
 .env.local
 .env*.local
 
-# cookie files
+# temp files
 *.txt
+*.html
 
 # Claude config
 AGENTS.md
 CLAUDE.md
-
-# temp files
-*.txt
-*.html
 
 # vercel
 .vercel
@@ -53,5 +50,5 @@ CLAUDE.md
 next-env.d.ts
 
 # database
-data/*.db
-data/*.sqlite
+# data/*.db
+# data/*.sqlite
