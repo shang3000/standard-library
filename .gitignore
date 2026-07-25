@@ -30,8 +30,20 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files
+.env.local
+.env*.local
+
+# cookie files
+*.txt
+
+# Claude config
+AGENTS.md
+CLAUDE.md
+
+# temp files
+*.txt
+*.html
 
 # vercel
 .vercel
@@ -43,7 +55,3 @@ next-env.d.ts
 # database
 data/*.db
 data/*.sqlite
-
-# temp files
-*.txt
-*.html
