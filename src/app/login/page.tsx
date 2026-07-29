@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useTranslation } from '@/lib/i18n';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -26,14 +28,14 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || '登录失败');
+        setError(data.error || t('login.failed'));
         return;
       }
 
       // 登录成功，跳转首页（强制刷新以更新 Navbar 状态）
       window.location.href = '/';
     } catch {
-      setError('登录失败，请重试');
+      setError(t('login.failedRetry'));
     } finally {
       setLoading(false);
     }
@@ -49,8 +51,8 @@ export default function LoginPage() {
         <div className="glass-strong rounded-3xl shadow-xl p-8">
           <div className="text-center mb-8">
             <span className="text-5xl mb-4 block">📚</span>
-            <h1 className="text-2xl font-bold text-gray-800">登录标准文库</h1>
-            <p className="text-gray-400 mt-2">欢迎回来</p>
+            <h1 className="text-2xl font-bold text-gray-800">{t('login.title')}</h1>
+            <p className="text-gray-400 mt-2">{t('login.welcome')}</p>
           </div>
 
           {error && (
@@ -62,7 +64,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-600 mb-1.5">
-                用户名
+                {t('login.username')}
               </label>
               <input
                 id="username"
@@ -71,13 +73,13 @@ export default function LoginPage() {
                 onChange={(e) => setUsername(e.target.value)}
                 required
                 className="w-full px-4 py-3 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
-                placeholder="请输入用户名"
+                placeholder={t('login.usernamePlaceholder')}
               />
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-600 mb-1.5">
-                密码
+                {t('login.password')}
               </label>
               <input
                 id="password"
@@ -86,7 +88,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 className="w-full px-4 py-3 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
-                placeholder="请输入密码"
+                placeholder={t('login.passwordPlaceholder')}
               />
             </div>
 
@@ -95,15 +97,15 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full py-3 btn-sheen bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? '登录中...' : '登录'}
+              {loading ? t('login.logging') : t('login.button')}
             </button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-gray-400 text-sm">
-              还没有账号？{' '}
+              {t('login.noAccount')}{' '}
               <Link href="/register" className="text-primary hover:text-primary-dark font-medium transition-colors duration-200">
-                立即注册
+                {t('login.registerNow')}
               </Link>
             </p>
           </div>

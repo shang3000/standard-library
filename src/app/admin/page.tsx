@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslation } from '@/lib/i18n';
 
 interface Document {
   id: number;
@@ -25,6 +26,7 @@ interface User {
 }
 
 export default function AdminPage() {
+  const { t } = useTranslation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
@@ -68,10 +70,10 @@ export default function AdminPage() {
         setIsAuthenticated(true);
         sessionStorage.setItem('admin_auth', 'true');
       } else {
-        setAuthError('密码错误');
+        setAuthError(t('admin.passwordError'));
       }
     } catch {
-      setAuthError('验证失败，请重试');
+      setAuthError(t('admin.verifyFailed'));
     }
   };
 
@@ -103,7 +105,7 @@ export default function AdminPage() {
   };
 
   const handleDeleteDocument = async (id: number) => {
-    if (!confirm('确定要删除这个文档吗？')) return;
+    if (!confirm(t('admin.confirmDelete'))) return;
 
     try {
       const response = await fetch(`/api/admin/documents/${id}`, {
@@ -111,13 +113,13 @@ export default function AdminPage() {
       });
 
       if (response.ok) {
-        setMessage({ type: 'success', text: '文档已删除' });
+        setMessage({ type: 'success', text: t('admin.deleted') });
         fetchDocuments();
       } else {
-        setMessage({ type: 'error', text: '删除失败' });
+        setMessage({ type: 'error', text: t('admin.deleteFailed') });
       }
     } catch {
-      setMessage({ type: 'error', text: '删除失败，请重试' });
+      setMessage({ type: 'error', text: t('admin.deleteRetry') });
     }
   };
 
@@ -134,7 +136,7 @@ export default function AdminPage() {
       });
 
       if (response.ok) {
-        setMessage({ type: 'success', text: '文档添加成功' });
+        setMessage({ type: 'success', text: t('admin.addSuccess') });
         setNewDoc({
           title: '',
           category: '行业标准',
@@ -148,10 +150,10 @@ export default function AdminPage() {
         fetchDocuments();
       } else {
         const data = await response.json();
-        setMessage({ type: 'error', text: data.error || '添加失败' });
+        setMessage({ type: 'error', text: data.error || t('admin.addFailed') });
       }
     } catch {
-      setMessage({ type: 'error', text: '添加失败，请重试' });
+      setMessage({ type: 'error', text: t('admin.addFailedRetry') });
     } finally {
       setLoading(false);
     }
@@ -175,8 +177,8 @@ export default function AdminPage() {
         <div className="max-w-md w-full glass-strong rounded-3xl shadow-xl p-8 relative z-10 animate-fade-in-up">
           <div className="text-center mb-8">
             <span className="text-5xl mb-4 block">🔐</span>
-            <h1 className="text-2xl font-bold text-gray-800">后台管理</h1>
-            <p className="text-gray-400 mt-2">请输入管理员密码</p>
+            <h1 className="text-2xl font-bold text-gray-800">{t('admin.title')}</h1>
+            <p className="text-gray-400 mt-2">{t('admin.passwordPlaceholder')}</p>
           </div>
 
           {authError && (
@@ -188,7 +190,7 @@ export default function AdminPage() {
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-600 mb-1.5">
-                管理密码
+                {t('admin.passwordLabel')}
               </label>
               <input
                 id="password"
@@ -197,7 +199,7 @@ export default function AdminPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 className="w-full px-4 py-3 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
-                placeholder="请输入管理员密码"
+                placeholder={t('admin.passwordPlaceholder')}
               />
             </div>
 
@@ -205,7 +207,7 @@ export default function AdminPage() {
               type="submit"
               className="w-full py-3 btn-sheen bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
             >
-              登录
+              {t('admin.loginButton')}
             </button>
           </form>
         </div>
@@ -222,11 +224,11 @@ export default function AdminPage() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <span className="text-2xl">⚙️</span>
-              <span className="text-xl font-bold text-gradient">后台管理</span>
+              <span className="text-xl font-bold text-gradient">{t('admin.title')}</span>
             </div>
             <div className="flex items-center space-x-4">
               <a href="/" className="text-gray-500 hover:text-primary-dark transition-colors duration-200 text-sm">
-                返回前台
+                {t('admin.backToFront')}
               </a>
               <button
                 onClick={() => {
@@ -235,7 +237,7 @@ export default function AdminPage() {
                 }}
                 className="text-red-400 hover:text-red-600 transition-colors duration-200 text-sm"
               >
-                退出
+                {t('admin.exit')}
               </button>
             </div>
           </div>
@@ -262,9 +264,9 @@ export default function AdminPage() {
         <div className="border-b border-white/30">
           <nav className="-mb-px flex space-x-4">
             {[
-              { key: 'documents' as const, icon: '📄', label: '文档管理' },
-              { key: 'add-doc' as const, icon: '➕', label: '添加文档' },
-              { key: 'users' as const, icon: '👥', label: '用户管理' },
+              { key: 'documents' as const, icon: '📄', label: t('admin.docManagement') },
+              { key: 'add-doc' as const, icon: '➕', label: t('admin.addDoc') },
+              { key: 'users' as const, icon: '👥', label: t('admin.userManagement') },
             ].map((tab) => (
               <button
                 key={tab.key}
@@ -289,36 +291,36 @@ export default function AdminPage() {
           <div className="glass-strong rounded-2xl overflow-hidden shadow-lg">
             <div className="px-6 py-4 border-b border-white/30">
               <h2 className="text-lg font-semibold text-gray-700">
-                文档列表 ({documents.length})
+                {t('admin.docList')} ({documents.length})
               </h2>
             </div>
             {loading ? (
-              <div className="p-8 text-center text-gray-500">加载中...</div>
+              <div className="p-8 text-center text-gray-500">{t('admin.loading')}</div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-white/20">
                   <thead>
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                        ID
+                        {t('admin.table.id')}
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                        标题
+                        {t('admin.table.title')}
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                        分类
+                        {t('admin.table.category')}
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                        格式
+                        {t('admin.table.format')}
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                        价格
+                        {t('admin.table.price')}
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                        下载
+                        {t('admin.table.downloads')}
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                        操作
+                        {t('admin.table.action')}
                       </th>
                     </tr>
                   </thead>
@@ -350,7 +352,7 @@ export default function AdminPage() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {doc.priceStars === 0 ? (
-                            <span className="text-emerald-500 font-medium">免费</span>
+                            <span className="text-emerald-500 font-medium">{t('admin.free')}</span>
                           ) : (
                             <span>⭐ {doc.priceStars}</span>
                           )}
@@ -363,7 +365,7 @@ export default function AdminPage() {
                             onClick={() => handleDeleteDocument(doc.id)}
                             className="text-red-400 hover:text-red-600 transition-colors duration-200"
                           >
-                            删除
+                            {t('admin.table.delete')}
                           </button>
                         </td>
                       </tr>
@@ -378,12 +380,12 @@ export default function AdminPage() {
         {/* 添加文档 */}
         {activeTab === 'add-doc' && (
           <div className="glass-strong rounded-2xl p-6 shadow-lg">
-            <h2 className="text-lg font-semibold text-gray-700 mb-6">添加新文档</h2>
+            <h2 className="text-lg font-semibold text-gray-700 mb-6">{t('admin.addForm.title')}</h2>
             <form onSubmit={handleAddDocument} className="space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1.5">
-                    文档标题 *
+                    {t('admin.addForm.titleLabel')} *
                   </label>
                   <input
                     type="text"
@@ -391,31 +393,31 @@ export default function AdminPage() {
                     onChange={(e) => setNewDoc({ ...newDoc, title: e.target.value })}
                     required
                     className="w-full px-4 py-2.5 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
-                    placeholder="输入文档标题"
+                    placeholder={t('admin.addForm.titlePlaceholder')}
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1.5">
-                    分类
+                    {t('admin.addForm.categoryLabel')}
                   </label>
                   <select
                     value={newDoc.category}
                     onChange={(e) => setNewDoc({ ...newDoc, category: e.target.value })}
                     className="w-full px-4 py-2.5 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200"
                   >
-                    <option value="行业标准">行业标准</option>
-                    <option value="国家标准">国家标准</option>
-                    <option value="国际标准">国际标准</option>
-                    <option value="企业标准">企业标准</option>
-                    <option value="地方标准">地方标准</option>
-                    <option value="团体标准">团体标准</option>
+                    <option value="行业标准">{t('categories.industry')}</option>
+                    <option value="国家标准">{t('categories.national')}</option>
+                    <option value="国际标准">{t('categories.international')}</option>
+                    <option value="企业标准">{t('categories.enterprise')}</option>
+                    <option value="地方标准">{t('categories.local')}</option>
+                    <option value="团体标准">{t('categories.group')}</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1.5">
-                    格式
+                    {t('admin.addForm.formatLabel')}
                   </label>
                   <select
                     value={newDoc.format}
@@ -431,7 +433,7 @@ export default function AdminPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1.5">
-                    页数
+                    {t('admin.addForm.pagesLabel')}
                   </label>
                   <input
                     type="number"
@@ -444,20 +446,20 @@ export default function AdminPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1.5">
-                    文件大小
+                    {t('admin.addForm.fileSizeLabel')}
                   </label>
                   <input
                     type="text"
                     value={newDoc.fileSize}
                     onChange={(e) => setNewDoc({ ...newDoc, fileSize: e.target.value })}
                     className="w-full px-4 py-2.5 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
-                    placeholder="例如: 3.5MB"
+                    placeholder={t('admin.addForm.fileSizePlaceholder')}
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1.5">
-                    价格（星币）
+                    {t('admin.addForm.priceLabel')}
                   </label>
                   <input
                     type="number"
@@ -471,14 +473,14 @@ export default function AdminPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-1.5">
-                  描述
+                  {t('admin.addForm.descLabel')}
                 </label>
                 <textarea
                   value={newDoc.description}
                   onChange={(e) => setNewDoc({ ...newDoc, description: e.target.value })}
                   rows={3}
                   className="w-full px-4 py-2.5 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
-                  placeholder="输入文档描述"
+                  placeholder={t('admin.addForm.descPlaceholder')}
                 />
               </div>
 
@@ -491,7 +493,7 @@ export default function AdminPage() {
                   className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
                 />
                 <label htmlFor="isVip" className="ml-2 block text-sm text-gray-600">
-                  VIP 专享文档
+                  {t('admin.addForm.vipOnly')}
                 </label>
               </div>
 
@@ -501,7 +503,7 @@ export default function AdminPage() {
                   disabled={loading}
                   className="px-6 py-2.5 btn-sheen bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50"
                 >
-                  {loading ? '添加中...' : '添加文档'}
+                  {loading ? t('admin.addForm.submitting') : t('admin.addForm.submitButton')}
                 </button>
               </div>
             </form>
@@ -513,7 +515,7 @@ export default function AdminPage() {
           <div className="glass-strong rounded-2xl overflow-hidden shadow-lg">
             <div className="px-6 py-4 border-b border-white/30">
               <h2 className="text-lg font-semibold text-gray-700">
-                用户列表 ({users.length})
+                {t('admin.userList')} ({users.length})
               </h2>
             </div>
             <div className="overflow-x-auto">
@@ -521,22 +523,22 @@ export default function AdminPage() {
                 <thead>
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                      ID
+                      {t('admin.table.id')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                      用户名
+                      {t('admin.userTable.username')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                      邮箱
+                      {t('admin.userTable.email')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                      VIP
+                      {t('admin.userTable.vip')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                      星币
+                      {t('admin.userTable.starCoins')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                      注册时间
+                      {t('admin.userTable.registerTime')}
                     </th>
                   </tr>
                 </thead>
@@ -558,7 +560,7 @@ export default function AdminPage() {
                             VIP
                           </span>
                         ) : (
-                          <span className="text-sm text-gray-400">普通</span>
+                          <span className="text-sm text-gray-400">{t('admin.userTable.normal')}</span>
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

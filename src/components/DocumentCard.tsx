@@ -2,12 +2,15 @@
 
 import Link from 'next/link';
 import { Document } from '@/types';
+import { useTranslation } from '@/lib/i18n';
 
 interface DocumentCardProps {
   doc: Document;
 }
 
 export default function DocumentCard({ doc }: DocumentCardProps) {
+  const { t } = useTranslation();
+
   // 格式标签颜色
   const formatTagColors: Record<string, string> = {
     PDF: 'bg-red-50 text-red-500 border border-red-200',
@@ -90,7 +93,7 @@ export default function DocumentCard({ doc }: DocumentCardProps) {
               </span>
               {doc.price === 0 ? (
                 <span className="inline-block px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-500 border border-emerald-200">
-                  免费
+                  {t('document.free')}
                 </span>
               ) : null}
             </div>

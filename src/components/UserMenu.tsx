@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from '@/lib/i18n';
 
 interface User {
   id: number;
@@ -14,6 +15,7 @@ interface User {
 
 export default function UserMenu() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
@@ -59,13 +61,13 @@ export default function UserMenu() {
           href="/login"
           className="text-gray-500 hover:text-gray-700 transition-colors duration-200 font-medium text-sm"
         >
-          登录
+          {t('user.login')}
         </Link>
         <Link
           href="/register"
           className="px-5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-full transition-all duration-200 text-sm shadow-sm"
         >
-          注册
+          {t('user.register')}
         </Link>
       </div>
     );
@@ -81,7 +83,7 @@ export default function UserMenu() {
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
-        我的文档
+        {t('user.myDocs')}
       </Link>
 
       {/* 用户菜单 */}
@@ -112,13 +114,13 @@ export default function UserMenu() {
               className="block px-4 py-2.5 text-sm text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 transition-all duration-200"
               onClick={() => setShowMenu(false)}
             >
-              个人中心
+              {t('user.profile')}
             </Link>
             <button
               onClick={handleLogout}
               className="block w-full text-left px-4 py-2.5 text-sm text-gray-600 hover:bg-red-50 hover:text-red-500 transition-all duration-200"
             >
-              退出登录
+              {t('user.logout')}
             </button>
           </div>
         )}

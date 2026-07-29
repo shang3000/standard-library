@@ -2,15 +2,19 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from '@/lib/i18n';
 
 interface SearchBarProps {
   placeholder?: string;
   large?: boolean;
 }
 
-export default function SearchBar({ placeholder = '搜索标准文档...', large = false }: SearchBarProps) {
+export default function SearchBar({ placeholder, large = false }: SearchBarProps) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const router = useRouter();
+
+  const resolvedPlaceholder = placeholder ?? t('search.placeholder');
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +30,7 @@ export default function SearchBar({ placeholder = '搜索标准文档...', large
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder={placeholder}
+          placeholder={resolvedPlaceholder}
           className={`flex-1 px-4 py-3 text-gray-700 focus:outline-none bg-transparent placeholder-gray-400 ${
             large ? 'text-lg' : 'text-sm'
           }`}
@@ -37,7 +41,7 @@ export default function SearchBar({ placeholder = '搜索标准文档...', large
             large ? 'px-8 py-3 text-lg' : 'px-6 py-2.5 text-sm'
           } rounded-xl`}
         >
-          搜索
+          {t('search.button')}
         </button>
       </div>
     </form>

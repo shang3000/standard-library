@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from '@/lib/i18n';
 
 interface DownloadButtonProps {
   docId: string;
@@ -11,6 +12,7 @@ interface DownloadButtonProps {
 
 export default function DownloadButton({ docId, price, isVip }: DownloadButtonProps) {
   const router = useRouter();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -52,15 +54,15 @@ export default function DownloadButton({ docId, price, isVip }: DownloadButtonPr
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || '下载失败');
+        setError(data.error || t('download.failed'));
         return;
       }
 
-      setSuccess(data.message || '下载成功');
+      setSuccess(data.message || t('download.success'));
       // 刷新页面更新下载次数
       router.refresh();
     } catch {
-      setError('下载失败，请重试');
+      setError(t('download.failedRetry'));
     } finally {
       setLoading(false);
     }
@@ -84,7 +86,7 @@ export default function DownloadButton({ docId, price, isVip }: DownloadButtonPr
             : 'btn-sheen bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white'
         }`}
       >
-        {loading ? '下载中...' : isDisabled ? 'VIP 专享' : insufficientStars ? '星币不足' : '立即下载'}
+        {loading ? t('download.loading') : isDisabled ? t('download.vipOnly') : insufficientStars ? t('download.insufficientStars') : t('download.button')}
       </button>
 
       {error && (
@@ -97,13 +99,13 @@ export default function DownloadButton({ docId, price, isVip }: DownloadButtonPr
 
       {isVip && !user?.isVip && (
         <p className="mt-2 text-sm text-yellow-500">
-          这是 VIP 专享文档，开通 VIP 即可免费下载
+          {t('download.vipDescription')}
         </p>
       )}
 
       {needsStars && user && !insufficientStars && (
         <p className="mt-2 text-sm text-gray-400">
-          下载将扣除 {price} 星币，当前余额 {user.starsBalance} 星币
+          {t('download.starsInfo', { price, balance: user.starsBalance })}
         </p>
       )}
     </div>

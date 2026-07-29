@@ -1,0 +1,286 @@
+{
+  "site": {
+    "name": "Standard Library",
+    "slogan": "Professional Standards Document Platform",
+    "description": "Access and download industry standards, national standards, international standards and more",
+    "copyright": "© 2024 Standard Library. All rights reserved."
+  },
+  "nav": {
+    "home": "Home",
+    "industry": "Industry",
+    "national": "National",
+    "international": "International",
+    "about": "About"
+  },
+  "hero": {
+    "title1": "Global",
+    "title2": "Standards",
+    "title3": "Smart Search",
+    "subtitle": "Aggregating global authoritative standards for enterprise compliance and innovation",
+    "searchPlaceholder": "Search industry, national, international standards..."
+  },
+  "hotSearch": "Hot Search",
+  "tags": {
+    "quality": "Quality Management",
+    "env": "Environmental",
+    "infosec": "Info Security",
+    "health": "Occupational Health",
+    "iso9001": "ISO9001",
+    "iso14001": "ISO14001"
+  },
+  "stats": {
+    "docs": "Documents",
+    "categories": "Categories",
+    "users": "Users",
+    "downloads": "Downloads"
+  },
+  "categorySection": {
+    "title": "Categories",
+    "subtitle": "Covering all industry standard systems",
+    "viewAll": "View All →"
+  },
+  "latestSection": {
+    "title": "Latest Documents",
+    "subtitle": "Real-time Updates · Authoritative",
+    "viewAll": "View All →",
+    "viewDetail": "View Detail"
+  },
+  "sidebar": {
+    "advantages": "Advantages",
+    "reliable": {
+      "title": "Authoritative",
+      "desc": "All documents from official sources"
+    },
+    "smart": {
+      "title": "Smart Search",
+      "desc": "Search by keywords or standard numbers"
+    },
+    "realtime": {
+      "title": "Real-time Updates",
+      "desc": "Tracking latest standard releases"
+    },
+    "format": {
+      "title": "Multi-format",
+      "desc": "PDF, DOC, PPT, XLS formats"
+    },
+    "platformData": "Platform Data",
+    "totalDownloads": "Total Downloads",
+    "docsWithDownloads": "Downloaded Docs",
+    "totalDocs": "Total Docs",
+    "registeredUsers": "Users",
+    "times": "",
+    "docs": "",
+    "people": ""
+  },
+  "search": {
+    "title": "Search Documents",
+    "placeholder": "Search standards...",
+    "button": "Search",
+    "result": "Found {count} documents for \"{query}\"",
+    "time": "in {ms}ms",
+    "notFound": "No documents found",
+    "tryOther": "Try different keywords, or browse our categories",
+    "backHome": "Back to Home",
+    "browseCategories": "Browse Categories",
+    "inputPlaceholder": "Enter search keywords",
+    "searchDesc": "Search industry, national, international standards"
+  },
+  "category": {
+    "breadcrumb": {
+      "home": "Home"
+    },
+    "stats": "Contains {count} {name} docs, continuously updated, authoritative and reliable",
+    "desc": "Covering national technical specifications across all industries",
+    "found": "Found {count} documents",
+    "sortBy": "Created",
+    "noResults": "No matching documents",
+    "adjustFilters": "Try adjusting your filters"
+  },
+  "filter": {
+    "title": "Filters",
+    "format": "Format",
+    "price": "Price",
+    "free": "Free Only",
+    "vip": "VIP Only",
+    "sortBy": "Sort By",
+    "latest": "Latest",
+    "downloads": "Most Downloads",
+    "priceAsc": "Price: Low to High",
+    "priceDesc": "Price: High to Low",
+    "reset": "Reset Filters"
+  },
+  "document": {
+    "free": "Free"
+  },
+  "docDetail": {
+    "breadcrumb": {
+      "home": "Home"
+    },
+    "vipBadge": "VIP",
+    "free": "Free",
+    "price": "Price",
+    "starCoin": "Coins",
+    "downloadNow": "Download Now",
+    "info": "Document Info",
+    "pages": "Pages",
+    "pagesUnit": "pages",
+    "fileSize": "File Size",
+    "uploadTime": "Upload Time",
+    "downloadCount": "Downloads",
+    "times": "",
+    "related": "Related Documents"
+  },
+  "download": {
+    "downloading": "Downloading...",
+    "vipOnly": "VIP Only",
+    "insufficient": "Insufficient Coins",
+    "downloadNow": "Download Now",
+    "failed": "Download Failed",
+    "success": "Download Success",
+    "failedRetry": "Download failed, please try again",
+    "vipMessage": "This is a VIP document. Upgrade to VIP for free downloads",
+    "confirmMessage": "Download will cost {price} coins, current balance: {balance} coins"
+  },
+  "user": {
+    "login": "Login",
+    "register": "Register",
+    "myDocs": "My Documents",
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+  "login": {
+    "title": "Login to Standard Library",
+    "welcome": "Welcome Back",
+    "username": "Username",
+    "password": "Password",
+    "usernamePlaceholder": "Enter username",
+    "passwordPlaceholder": "Enter password",
+    "logging": "Logging in...",
+    "button": "Login",
+    "noAccount": "Don't have an account?",
+    "registerNow": "Register Now",
+    "failed": "Login Failed",
+    "failedRetry": "Login failed, please try again"
+  },
+  "register": {
+    "title": "Register Standard Library",
+    "subtitle": "Create an account to get 50 coins",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "usernamePlaceholder": "3-20 characters",
+    "emailPlaceholder": "your@email.com",
+    "passwordPlaceholder": "At least 6 characters",
+    "confirmPlaceholder": "Re-enter password",
+    "registering": "Registering...",
+    "button": "Register",
+    "hasAccount": "Already have an account?",
+    "loginNow": "Login Now",
+    "passwordMismatch": "Passwords do not match",
+    "failed": "Registration Failed",
+    "failedRetry": "Registration failed, please try again"
+  },
+  "profile": {
+    "vipMember": "VIP Member",
+    "starCoins": "Coins",
+    "downloadHistory": "Download History",
+    "noHistory": "No download history",
+    "browseDocs": "Browse Documents →",
+    "free": "Free"
+  },
+  "about": {
+    "title": "About Us",
+    "subtitle": "Learn about Standard Library",
+    "intro": "Platform Introduction",
+    "introText1": "Standard Library is a professional standards document sharing platform, dedicated to providing engineers, researchers, and technical professionals with convenient access to standards documents.",
+    "introText2": "We collect national standards, industry standards, international standards, enterprise standards, local standards, and group standards, covering technical specifications across all industries.",
+    "advantages": "Core Advantages",
+    "reliable": {
+      "title": "Authoritative",
+      "desc": "All documents from official sources, ensuring accuracy and reliability"
+    },
+    "efficient": {
+      "title": "Efficient",
+      "desc": "Quick search, online preview, one-click download"
+    },
+    "complete": {
+      "title": "Comprehensive",
+      "desc": "Covering all standard types to meet different needs"
+    },
+    "community": {
+      "title": "Community",
+      "desc": "Users can upload and share standards documents"
+    },
+    "contact": "Contact Us",
+    "contactText": "If you have any suggestions, cooperation intentions, or feedback, please contact us:",
+    "email": "Email: contact@standard-library.com",
+    "address": "Address: Dalian, China"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "passwordPlaceholder": "Enter admin password",
+    "passwordLabel": "Password",
+    "loginButton": "Login",
+    "docManagement": "Documents",
+    "addDoc": "Add Document",
+    "userManagement": "Users",
+    "backToFront": "Back to Site",
+    "exit": "Exit",
+    "table": {
+      "id": "ID",
+      "title": "Title",
+      "category": "Category",
+      "format": "Format",
+      "price": "Price",
+      "downloads": "Downloads",
+      "action": "Action",
+      "delete": "Delete"
+    },
+    "loading": "Loading...",
+    "deleted": "Document deleted",
+    "deleteFailed": "Delete failed",
+    "passwordError": "Wrong password",
+    "verifyFailed": "Verification failed, please try again",
+    "addForm": {
+      "title": "Add New Document",
+      "titleLabel": "Document Title",
+      "titlePlaceholder": "Enter document title",
+      "categoryLabel": "Category",
+      "formatLabel": "Format",
+      "pagesLabel": "Pages",
+      "fileSizeLabel": "File Size",
+      "fileSizePlaceholder": "e.g. 3.5MB",
+      "priceLabel": "Price (Stars)",
+      "descLabel": "Description",
+      "descPlaceholder": "Enter document description",
+      "vipOnly": "VIP Only Document",
+      "submitButton": "Add Document",
+      "submitting": "Adding..."
+    },
+    "userTable": {
+      "username": "Username",
+      "email": "Email",
+      "vip": "VIP",
+      "starCoins": "Coins",
+      "registerTime": "Registered",
+      "normal": "Normal"
+    },
+    "confirmDelete": "Are you sure you want to delete this document?",
+    "docList": "Document List",
+    "userList": "User List",
+    "free": "Free",
+    "deleteRetry": "Delete failed, please try again",
+    "addSuccess": "Document added successfully",
+    "addFailed": "Add failed",
+    "addFailedRetry": "Add failed, please try again"
+  },
+  "categories": {
+    "industry": "Industry Standards",
+    "national": "National Standards",
+    "international": "International Standards",
+    "enterprise": "Enterprise Standards",
+    "local": "Local Standards",
+    "group": "Group Standards"
+  }
+}

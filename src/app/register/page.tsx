@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useTranslation } from '@/lib/i18n';
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,7 +21,7 @@ export default function RegisterPage() {
 
     // 验证密码
     if (password !== confirmPassword) {
-      setError('两次输入的密码不一致');
+      setError(t('register.passwordMismatch'));
       return;
     }
 
@@ -35,14 +37,14 @@ export default function RegisterPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || '注册失败');
+        setError(data.error || t('register.failed'));
         return;
       }
 
       // 注册成功，跳转首页（强制刷新以更新 Navbar 状态）
       window.location.href = '/';
     } catch {
-      setError('注册失败，请重试');
+      setError(t('register.failedRetry'));
     } finally {
       setLoading(false);
     }
@@ -58,8 +60,8 @@ export default function RegisterPage() {
         <div className="glass-strong rounded-3xl shadow-xl p-8">
           <div className="text-center mb-8">
             <span className="text-5xl mb-4 block">📚</span>
-            <h1 className="text-2xl font-bold text-gray-800">注册标准文库</h1>
-            <p className="text-gray-400 mt-2">创建账号即可获得 50 星币</p>
+            <h1 className="text-2xl font-bold text-gray-800">{t('register.title')}</h1>
+            <p className="text-gray-400 mt-2">{t('register.subtitle')}</p>
           </div>
 
           {error && (
@@ -71,7 +73,7 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-600 mb-1.5">
-                用户名
+                {t('register.username')}
               </label>
               <input
                 id="username"
@@ -82,13 +84,13 @@ export default function RegisterPage() {
                 minLength={3}
                 maxLength={20}
                 className="w-full px-4 py-3 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
-                placeholder="3-20 个字符"
+                placeholder={t('register.usernamePlaceholder')}
               />
             </div>
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-600 mb-1.5">
-                邮箱
+                {t('register.email')}
               </label>
               <input
                 id="email"
@@ -97,13 +99,13 @@ export default function RegisterPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full px-4 py-3 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
-                placeholder="your@email.com"
+                placeholder={t('register.emailPlaceholder')}
               />
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-600 mb-1.5">
-                密码
+                {t('register.password')}
               </label>
               <input
                 id="password"
@@ -113,13 +115,13 @@ export default function RegisterPage() {
                 required
                 minLength={6}
                 className="w-full px-4 py-3 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
-                placeholder="至少 6 个字符"
+                placeholder={t('register.passwordPlaceholder')}
               />
             </div>
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-600 mb-1.5">
-                确认密码
+                {t('register.confirmPassword')}
               </label>
               <input
                 id="confirmPassword"
@@ -128,7 +130,7 @@ export default function RegisterPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 className="w-full px-4 py-3 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
-                placeholder="再次输入密码"
+                placeholder={t('register.confirmPlaceholder')}
               />
             </div>
 
@@ -137,15 +139,15 @@ export default function RegisterPage() {
               disabled={loading}
               className="w-full py-3 btn-sheen bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed mt-2"
             >
-              {loading ? '注册中...' : '注册'}
+              {loading ? t('register.registering') : t('register.button')}
             </button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-gray-400 text-sm">
-              已有账号？{' '}
+              {t('register.hasAccount')}{' '}
               <Link href="/login" className="text-primary hover:text-primary-dark font-medium transition-colors duration-200">
-                立即登录
+                {t('register.loginNow')}
               </Link>
             </p>
           </div>

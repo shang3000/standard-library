@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { DocFormat } from '@/types';
+import { useTranslation } from '@/lib/i18n';
 
 const formats: DocFormat[] = ['PDF', 'DOC', 'PPT', 'XLS'];
 
@@ -21,6 +22,7 @@ export default function CategoryFilter({
   baseUrl,
 }: CategoryFilterProps) {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const updateFilter = (key: string, value: string | null) => {
     const url = new URL(window.location.href);
@@ -56,7 +58,7 @@ export default function CategoryFilter({
       {/* 标题 */}
       <div className="flex items-center justify-between mb-6">
         <h3 className="font-bold text-gray-800 text-base flex items-center gap-2">
-          筛选条件
+          {t('filter.title')}
           <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
           </svg>
@@ -65,7 +67,7 @@ export default function CategoryFilter({
 
       {/* 格式筛选 */}
       <div className="mb-6">
-        <h4 className="text-sm font-medium text-gray-700 mb-3">文档格式</h4>
+        <h4 className="text-sm font-medium text-gray-700 mb-3">{t('filter.format')}</h4>
         <div className="space-y-2.5">
           {formats.map((format) => (
             <label key={format} className="flex items-center gap-3 cursor-pointer group">
@@ -92,7 +94,7 @@ export default function CategoryFilter({
 
       {/* 价格筛选 */}
       <div className="mb-6">
-        <h4 className="text-sm font-medium text-gray-700 mb-3">价格</h4>
+        <h4 className="text-sm font-medium text-gray-700 mb-3">{t('filter.price')}</h4>
         <div className="space-y-2.5">
           <label className="flex items-center gap-3 cursor-pointer group">
             <div className="relative">
@@ -110,7 +112,7 @@ export default function CategoryFilter({
                 )}
               </div>
             </div>
-            <span className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors duration-200">免费文档</span>
+            <span className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors duration-200">{t('filter.free')}</span>
           </label>
           <label className="flex items-center gap-3 cursor-pointer group">
             <div className="relative">
@@ -128,24 +130,24 @@ export default function CategoryFilter({
                 )}
               </div>
             </div>
-            <span className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors duration-200">VIP 文档</span>
+            <span className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors duration-200">{t('filter.vip')}</span>
           </label>
         </div>
       </div>
 
       {/* 排序方式 */}
       <div className="mb-6">
-        <h4 className="text-sm font-medium text-gray-700 mb-3">排序方式</h4>
+        <h4 className="text-sm font-medium text-gray-700 mb-3">{t('filter.sortBy')}</h4>
         <select
           value={sort}
           onChange={(e) => updateFilter('sort', e.target.value)}
           className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 text-gray-600 appearance-none"
           style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em' }}
         >
-          <option value="latest">最新上传</option>
-          <option value="downloads">最多下载</option>
-          <option value="price_asc">价格从低到高</option>
-          <option value="price_desc">价格从高到低</option>
+          <option value="latest">{t('filter.latest')}</option>
+          <option value="downloads">{t('filter.downloads')}</option>
+          <option value="price_asc">{t('filter.priceAsc')}</option>
+          <option value="price_desc">{t('filter.priceDesc')}</option>
         </select>
       </div>
 
@@ -157,7 +159,7 @@ export default function CategoryFilter({
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
         </svg>
-        重置筛选
+        {t('filter.reset')}
       </button>
     </div>
   );

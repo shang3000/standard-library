@@ -1,6 +1,11 @@
+'use client';
+
 import Link from 'next/link';
+import { useTranslation } from '@/lib/i18n';
 
 export default function Footer() {
+  const { t } = useTranslation();
+
   return (
     <footer className="bg-white border-t border-gray-100 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -13,32 +18,32 @@ export default function Footer() {
               </svg>
             </div>
             <div>
-              <span className="font-bold text-gray-800">标准文库</span>
-              <p className="text-[10px] text-gray-400">专业标准文档分享平台</p>
+              <span className="font-bold text-gray-800">{t('site.name')}</span>
+              <p className="text-[10px] text-gray-400">{t('site.slogan')}</p>
             </div>
           </div>
 
           {/* Nav Links */}
           <nav className="flex items-center gap-6">
             <Link href="/" className="text-sm text-gray-500 hover:text-emerald-600 transition-colors duration-200">
-              首页
+              {t('nav.home')}
             </Link>
             <Link href="/category/行业标准" className="text-sm text-gray-500 hover:text-emerald-600 transition-colors duration-200">
-              行业标准
+              {t('nav.industry')}
             </Link>
             <Link href="/category/国家标准" className="text-sm text-gray-500 hover:text-emerald-600 transition-colors duration-200">
-              国家标准
+              {t('nav.national')}
             </Link>
             <Link href="/category/国际标准" className="text-sm text-gray-500 hover:text-emerald-600 transition-colors duration-200">
-              国际标准
+              {t('nav.international')}
             </Link>
             <Link href="/about" className="text-sm text-gray-500 hover:text-emerald-600 transition-colors duration-200">
-              关于我们
+              {t('nav.about')}
             </Link>
           </nav>
 
           {/* Copyright */}
-          <p className="text-sm text-gray-400">© 2024 标准文库. All rights reserved.</p>
+          <p className="text-sm text-gray-400">{t('site.copyright')}</p>
         </div>
       </div>
     </footer>

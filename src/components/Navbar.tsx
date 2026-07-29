@@ -4,18 +4,20 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import UserMenu from './UserMenu';
-
-const navItems = [
-  { name: '首页', href: '/' },
-  { name: '行业标准', href: '/category/行业标准' },
-  { name: '国家标准', href: '/category/国家标准' },
-  { name: '国际标准', href: '/category/国际标准' },
-  { name: '关于我们', href: '/about' },
-];
+import { useTranslation } from '@/lib/i18n';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const { t, locale, setLocale } = useTranslation();
+
+  const navItems = [
+    { name: t('nav.home'), href: '/' },
+    { name: t('nav.industry'), href: '/category/行业标准' },
+    { name: t('nav.national'), href: '/category/国家标准' },
+    { name: t('nav.international'), href: '/category/国际标准' },
+    { name: t('nav.about'), href: '/about' },
+  ];
 
   return (
     <nav className="bg-white sticky top-0 z-50 border-b border-gray-100">
@@ -30,8 +32,8 @@ export default function Navbar() {
                 </svg>
               </div>
               <div className="hidden sm:block">
-                <span className="text-lg font-bold text-gray-800 block leading-tight">标准文库</span>
-                <span className="text-[10px] text-gray-400 leading-none">专业标准文档分享平台</span>
+                <span className="text-lg font-bold text-gray-800 block leading-tight">{t('site.name')}</span>
+                <span className="text-[10px] text-gray-400 leading-none">{t('site.slogan')}</span>
               </div>
             </Link>
           </div>
@@ -42,7 +44,7 @@ export default function Navbar() {
               const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
               return (
                 <Link
-                  key={item.name}
+                  key={item.href}
                   href={item.href}
                   className={`px-4 py-2 font-medium transition-all duration-200 relative ${
                     isActive
@@ -59,13 +61,26 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* User Menu */}
-          <div className="hidden md:flex items-center">
+          {/* Right side: Language switch + User Menu */}
+          <div className="hidden md:flex items-center space-x-3">
+            {/* Language Switcher */}
+            <button
+              onClick={() => setLocale(locale === 'zh' ? 'en' : 'zh')}
+              className="px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-primary-dark border border-gray-200 rounded-lg hover:border-primary/50 transition-all duration-200"
+            >
+              {locale === 'zh' ? 'EN' : '中'}
+            </button>
             <UserMenu />
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center space-x-2">
+            <button
+              onClick={() => setLocale(locale === 'zh' ? 'en' : 'zh')}
+              className="px-2 py-1 text-sm font-medium text-gray-600 border border-gray-200 rounded-lg"
+            >
+              {locale === 'zh' ? 'EN' : '中'}
+            </button>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-gray-600 hover:text-primary-dark p-2 rounded-lg hover:bg-primary/10 transition-all duration-200 focus:outline-none"
@@ -93,7 +108,7 @@ export default function Navbar() {
             const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
             return (
               <Link
-                key={item.name}
+                key={item.href}
                 href={item.href}
                 className={`block px-3 py-2 rounded-lg transition-all duration-200 ${
                   isActive

@@ -1,0 +1,286 @@
+{
+  "site": {
+    "name": "标准文库",
+    "slogan": "专业标准文档分享平台",
+    "description": "提供行业标准、国家标准、国际标准等各类标准文档的查阅与下载服务",
+    "copyright": "© 2024 标准文库. All rights reserved."
+  },
+  "nav": {
+    "home": "首页",
+    "industry": "行业标准",
+    "national": "国家标准",
+    "international": "国际标准",
+    "about": "关于我们"
+  },
+  "hero": {
+    "title1": "全球标准",
+    "title2": "权威专业",
+    "title3": "智能检索",
+    "subtitle": "汇聚全球权威标准，助力企业合规发展与创新",
+    "searchPlaceholder": "搜索行业标准、国家标准、国际标准..."
+  },
+  "hotSearch": "热门搜索",
+  "tags": {
+    "quality": "质量管理",
+    "env": "环境管理",
+    "infosec": "信息安全",
+    "health": "职业健康",
+    "iso9001": "ISO9001",
+    "iso14001": "ISO14001"
+  },
+  "stats": {
+    "docs": "标准文档",
+    "categories": "文档分类",
+    "users": "注册用户",
+    "downloads": "累计下载"
+  },
+  "categorySection": {
+    "title": "文档分类",
+    "subtitle": "覆盖各行业标准体系",
+    "viewAll": "查看全部分类 →"
+  },
+  "latestSection": {
+    "title": "最新文档",
+    "subtitle": "实时更新 · 权威发布",
+    "viewAll": "查看全部 →",
+    "viewDetail": "查看详情"
+  },
+  "sidebar": {
+    "advantages": "平台优势",
+    "reliable": {
+      "title": "权威可靠",
+      "desc": "所有文档均来自官方渠道"
+    },
+    "smart": {
+      "title": "智能检索",
+      "desc": "支持关键词、标准号搜索"
+    },
+    "realtime": {
+      "title": "实时更新",
+      "desc": "持续跟踪最新标准发布"
+    },
+    "format": {
+      "title": "多格式支持",
+      "desc": "PDF、DOC、PPT、XLS 多格式"
+    },
+    "platformData": "平台数据",
+    "totalDownloads": "总下载量",
+    "docsWithDownloads": "有下载的文档",
+    "totalDocs": "文档总数",
+    "registeredUsers": "注册用户",
+    "times": "次",
+    "docs": "份",
+    "people": "人"
+  },
+  "search": {
+    "title": "搜索文档",
+    "placeholder": "搜索标准文档...",
+    "button": "搜索",
+    "result": "搜索 {query} 找到 {count} 份文档",
+    "time": "耗时 {ms}ms",
+    "notFound": "未找到相关文档",
+    "tryOther": "试试其他关键词，或者浏览我们的分类文档",
+    "backHome": "返回首页",
+    "browseCategories": "浏览分类",
+    "inputPlaceholder": "请输入搜索关键词",
+    "searchDesc": "搜索行业标准、国家标准、国际标准等文档"
+  },
+  "category": {
+    "breadcrumb": {
+      "home": "首页"
+    },
+    "stats": "收录{name} {count} 份，持续更新，权威可靠",
+    "desc": "覆盖各行业各领域的国家级技术规范与要求",
+    "found": "共找到 {count} 份文档",
+    "sortBy": "创建时间",
+    "noResults": "暂无符合条件的文档",
+    "adjustFilters": "请尝试调整筛选条件"
+  },
+  "filter": {
+    "title": "筛选条件",
+    "format": "文档格式",
+    "price": "价格",
+    "free": "免费文档",
+    "vip": "VIP 文档",
+    "sortBy": "排序方式",
+    "latest": "最新上传",
+    "downloads": "最多下载",
+    "priceAsc": "价格从低到高",
+    "priceDesc": "价格从高到低",
+    "reset": "重置筛选"
+  },
+  "document": {
+    "free": "免费"
+  },
+  "docDetail": {
+    "breadcrumb": {
+      "home": "首页"
+    },
+    "vipBadge": "VIP",
+    "free": "免费",
+    "price": "价格",
+    "starCoin": "星币",
+    "downloadNow": "立即下载",
+    "info": "文档信息",
+    "pages": "页数",
+    "pagesUnit": "页",
+    "fileSize": "文件大小",
+    "uploadTime": "上传时间",
+    "downloadCount": "下载次数",
+    "times": "次",
+    "related": "相关推荐"
+  },
+  "download": {
+    "downloading": "下载中...",
+    "vipOnly": "VIP 专享",
+    "insufficient": "星币不足",
+    "downloadNow": "立即下载",
+    "failed": "下载失败",
+    "success": "下载成功",
+    "failedRetry": "下载失败，请重试",
+    "vipMessage": "这是 VIP 专享文档，开通 VIP 即可免费下载",
+    "confirmMessage": "下载将扣除 {price} 星币，当前余额 {balance} 星币"
+  },
+  "user": {
+    "login": "登录",
+    "register": "注册",
+    "myDocs": "我的文档",
+    "profile": "个人中心",
+    "logout": "退出登录"
+  },
+  "login": {
+    "title": "登录标准文库",
+    "welcome": "欢迎回来",
+    "username": "用户名",
+    "password": "密码",
+    "usernamePlaceholder": "请输入用户名",
+    "passwordPlaceholder": "请输入密码",
+    "logging": "登录中...",
+    "button": "登录",
+    "noAccount": "还没有账号？",
+    "registerNow": "立即注册",
+    "failed": "登录失败",
+    "failedRetry": "登录失败，请重试"
+  },
+  "register": {
+    "title": "注册标准文库",
+    "subtitle": "创建账号即可获得 50 星币",
+    "username": "用户名",
+    "email": "邮箱",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "usernamePlaceholder": "3-20 个字符",
+    "emailPlaceholder": "your@email.com",
+    "passwordPlaceholder": "至少 6 个字符",
+    "confirmPlaceholder": "再次输入密码",
+    "registering": "注册中...",
+    "button": "注册",
+    "hasAccount": "已有账号？",
+    "loginNow": "立即登录",
+    "passwordMismatch": "两次输入的密码不一致",
+    "failed": "注册失败",
+    "failedRetry": "注册失败，请重试"
+  },
+  "profile": {
+    "vipMember": "VIP 会员",
+    "starCoins": "星币",
+    "downloadHistory": "下载历史",
+    "noHistory": "暂无下载记录",
+    "browseDocs": "去浏览文档 →",
+    "free": "免费"
+  },
+  "about": {
+    "title": "关于我们",
+    "subtitle": "了解标准文库，专业标准文档分享平台",
+    "intro": "平台介绍",
+    "introText1": "标准文库是一个专业的标准文档分享平台，致力于为工程师、研究人员、企业技术人员提供便捷的标准文档查阅与下载服务。",
+    "introText2": "我们收录了国家标准、行业标准、国际标准、企业标准、地方标准、团体标准等多种类型的标准文档，覆盖各行各业各领域的技术规范与要求。",
+    "advantages": "核心优势",
+    "reliable": {
+      "title": "权威可靠",
+      "desc": "所有文档均来自官方渠道，确保内容准确、权威、最新"
+    },
+    "efficient": {
+      "title": "高效便捷",
+      "desc": "快速搜索、在线预览、一键下载，让标准文档触手可及"
+    },
+    "complete": {
+      "title": "分类齐全",
+      "desc": "涵盖国标、行标、地标、团标等多种标准类型，满足不同需求"
+    },
+    "community": {
+      "title": "社区共享",
+      "desc": "用户可上传分享标准文档，共建标准知识库"
+    },
+    "contact": "联系我们",
+    "contactText": "如果您有任何建议、合作意向或问题反馈，欢迎通过以下方式联系我们：",
+    "email": "邮箱：contact@standard-library.com",
+    "address": "地址：中国 · 大连"
+  },
+  "admin": {
+    "title": "后台管理",
+    "passwordPlaceholder": "请输入管理员密码",
+    "passwordLabel": "管理密码",
+    "loginButton": "登录",
+    "docManagement": "文档管理",
+    "addDoc": "添加文档",
+    "userManagement": "用户管理",
+    "backToFront": "返回前台",
+    "exit": "退出",
+    "table": {
+      "id": "ID",
+      "title": "标题",
+      "category": "分类",
+      "format": "格式",
+      "price": "价格",
+      "downloads": "下载",
+      "action": "操作",
+      "delete": "删除"
+    },
+    "loading": "加载中...",
+    "deleted": "文档已删除",
+    "deleteFailed": "删除失败",
+    "passwordError": "密码错误",
+    "verifyFailed": "验证失败，请重试",
+    "userTable": {
+      "username": "用户名",
+      "email": "邮箱",
+      "vip": "VIP",
+      "starCoins": "星币",
+      "registerTime": "注册时间",
+      "normal": "普通"
+    },
+    "confirmDelete": "确定要删除这个文档吗？",
+    "docList": "文档列表",
+    "userList": "用户列表",
+    "free": "免费",
+    "deleteRetry": "删除失败，请重试",
+    "addSuccess": "文档添加成功",
+    "addFailed": "添加失败",
+    "addFailedRetry": "添加失败，请重试",
+    "addForm": {
+      "title": "添加新文档",
+      "titleLabel": "文档标题",
+      "titlePlaceholder": "输入文档标题",
+      "categoryLabel": "分类",
+      "formatLabel": "格式",
+      "pagesLabel": "页数",
+      "fileSizeLabel": "文件大小",
+      "fileSizePlaceholder": "例如: 3.5MB",
+      "priceLabel": "价格（星币）",
+      "descLabel": "描述",
+      "descPlaceholder": "输入文档描述",
+      "vipOnly": "VIP 专享文档",
+      "submitButton": "添加文档",
+      "submitting": "添加中..."
+    }
+  },
+  "categories": {
+    "industry": "行业标准",
+    "national": "国家标准",
+    "international": "国际标准",
+    "enterprise": "企业标准",
+    "local": "地方标准",
+    "group": "团体标准"
+  }
+}
