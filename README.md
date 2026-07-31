@@ -2,6 +2,8 @@
 
 面向标准与合规资料管理的全栈文档平台。项目围绕“管理员维护文档、用户按权限获取资料、系统可追溯下载行为”构建，适合作为 Next.js + MySQL 工程化作品集项目。
 
+> 这是一个可自行接入 MySQL 的开源模板：仓库提供数据库结构、迁移脚本和配置模板，但不包含任何真实数据库、账号密码或用户上传文件。
+
 ## 项目亮点
 
 - MySQL + Prisma 持久化：分类、文档、用户、VIP、星币与下载记录具有关联约束与迁移历史。
@@ -74,6 +76,26 @@ npm run dev
 ```
 
 访问 `http://localhost:3000`，后台入口为 `/admin`。
+
+## 开源使用与部署说明
+
+本仓库不会上传或同步本机 MySQL。使用者克隆项目后，按下列流程配置自己的数据库即可：
+
+```powershell
+npm install
+Copy-Item .env.example .env.local
+# 编辑 .env.local，填写自己的 MySQL 连接串、JWT_SECRET 和 ADMIN_PASSWORD
+npx prisma migrate deploy
+npm run dev
+```
+
+提交到 GitHub 的内容包括 Prisma 数据表定义与迁移脚本；以下内容均由 `.gitignore` 排除：
+
+- `.env.local`：数据库密码、JWT 密钥与后台密码
+- `storage/documents/`：本地上传的私有资料
+- `data/*.db`、`data/*.sqlite`：旧数据库文件与本地备份
+
+> 项目不能“零配置一键部署”到 Vercel：云端环境无法访问开发者电脑上的 `localhost` MySQL。若要上线，请使用可从公网访问的云 MySQL，并在部署平台配置对应的 `DATABASE_URL`、`JWT_SECRET` 与 `ADMIN_PASSWORD`；文件存储也应替换为对象存储服务。
 
 ## 常用命令
 
