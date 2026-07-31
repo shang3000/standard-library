@@ -5,47 +5,5 @@ import { useTranslation } from '@/lib/i18n';
 
 export default function Footer() {
   const { t } = useTranslation();
-
-  return (
-    <footer className="bg-white border-t border-gray-100 mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-              </svg>
-            </div>
-            <div>
-              <span className="font-bold text-gray-800">{t('site.name')}</span>
-              <p className="text-[10px] text-gray-400">{t('site.slogan')}</p>
-            </div>
-          </div>
-
-          {/* Nav Links */}
-          <nav className="flex items-center gap-6">
-            <Link href="/" className="text-sm text-gray-500 hover:text-emerald-600 transition-colors duration-200">
-              {t('nav.home')}
-            </Link>
-            <Link href="/category/行业标准" className="text-sm text-gray-500 hover:text-emerald-600 transition-colors duration-200">
-              {t('nav.industry')}
-            </Link>
-            <Link href="/category/国家标准" className="text-sm text-gray-500 hover:text-emerald-600 transition-colors duration-200">
-              {t('nav.national')}
-            </Link>
-            <Link href="/category/国际标准" className="text-sm text-gray-500 hover:text-emerald-600 transition-colors duration-200">
-              {t('nav.international')}
-            </Link>
-            <Link href="/about" className="text-sm text-gray-500 hover:text-emerald-600 transition-colors duration-200">
-              {t('nav.about')}
-            </Link>
-          </nav>
-
-          {/* Copyright */}
-          <p className="text-sm text-gray-400">{t('site.copyright')}</p>
-        </div>
-      </div>
-    </footer>
-  );
+  return <footer className="mt-auto border-t border-slate-200 bg-white"><div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-[1.3fr_1fr_1fr] lg:px-8"><div><div className="flex items-center gap-3"><span className="grid h-9 w-9 place-items-center rounded-xl bg-[#17324d] text-xs font-black text-white">SL</span><div><p className="font-bold text-slate-800">{t('site.name')}</p><p className="text-[10px] tracking-[0.12em] text-slate-400">STANDARD ARCHIVE</p></div></div><p className="mt-4 max-w-sm text-sm leading-6 text-slate-500">为标准与合规资料建立更清晰的检索、权限与下载记录。</p></div><div><p className="text-xs font-bold tracking-[0.14em] text-sky-700">BROWSE</p><div className="mt-4 grid gap-2 text-sm text-slate-500"><Link href="/category/行业标准" className="hover:text-sky-700">{t('nav.industry')}</Link><Link href="/category/国家标准" className="hover:text-sky-700">{t('nav.national')}</Link><Link href="/category/国际标准" className="hover:text-sky-700">{t('nav.international')}</Link></div></div><div><p className="text-xs font-bold tracking-[0.14em] text-sky-700">PLATFORM</p><div className="mt-4 grid gap-2 text-sm text-slate-500"><Link href="/about" className="hover:text-sky-700">{t('nav.about')}</Link><Link href="/admin" className="hover:text-sky-700">资料运营台</Link><p className="pt-3 text-xs text-slate-400">{t('site.copyright')}</p></div></div></div></footer>;
 }

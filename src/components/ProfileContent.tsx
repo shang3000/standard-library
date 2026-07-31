@@ -32,10 +32,10 @@ export default function ProfileContent({ username, email, isVip, starsBalance, d
   };
 
   return (
-    <div className="min-h-screen mesh-bg">
+    <div className="min-h-screen bg-[#f5f9fd]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* 用户信息卡片 */}
-        <div className="glass-strong rounded-3xl shadow-xl p-8 mb-8 animate-fade-in-up">
+        <div className="rounded-3xl border border-slate-200 bg-white shadow-sm p-8 mb-8 animate-fade-in-up">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-800 mb-2">{username}</h1>
@@ -49,7 +49,7 @@ export default function ProfileContent({ username, email, isVip, starsBalance, d
               )}
               <div className="flex items-center justify-end space-x-2">
                 <span className="text-yellow-400 text-xl">⭐</span>
-                <span className="text-2xl font-bold text-primary-dark">{starsBalance}</span>
+                <span className="text-2xl font-bold text-[#17324d]">{starsBalance}</span>
                 <span className="text-gray-400">{t('profile.starCoins')}</span>
               </div>
             </div>
@@ -57,18 +57,18 @@ export default function ProfileContent({ username, email, isVip, starsBalance, d
         </div>
 
         {/* 下载历史 */}
-        <div className="glass-strong rounded-2xl overflow-hidden shadow-lg">
+        <div className="rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-sm">
           <div className="px-6 py-4 border-b border-white/30">
             <h2 className="text-lg font-bold text-gray-700">{t('profile.downloadHistory')}</h2>
           </div>
 
           {downloads.length > 0 ? (
-            <div className="divide-y divide-white/20">
+            <div className="divide-y divide-slate-100">
               {downloads.map((download) => (
                 <Link
                   key={download.id}
                   href={`/doc/${download.docId}`}
-                  className="flex items-center px-6 py-4 hover:bg-white/30 transition-all duration-200"
+                  className="flex items-center px-6 py-4 hover:bg-sky-50/60 transition-all duration-200"
                 >
                   <div className="flex-1 min-w-0">
                     <h3 className="text-sm font-medium text-gray-700 truncate">{download.title}</h3>
@@ -102,7 +102,7 @@ export default function ProfileContent({ username, email, isVip, starsBalance, d
               <p className="text-gray-400">{t('profile.noHistory')}</p>
               <Link
                 href="/"
-                className="inline-block mt-4 text-primary hover:text-primary-dark font-medium transition-colors duration-200"
+                className="inline-block mt-4 text-sky-700 hover:text-sky-900 font-medium transition-colors duration-200"
               >
                 {t('profile.browseDocs')}
               </Link>

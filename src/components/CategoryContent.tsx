@@ -56,44 +56,34 @@ export default function CategoryContent({
   const config = categoryConfig[category.name] || { icon: '📄', bg: 'bg-gray-100', text: 'text-gray-600' };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="relative h-[220px]">
-        {/* 背景图 */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: 'url(/images/hero-bg.png)' }}
-        />
-        {/* 轻度渐变遮罩 - 让地球可见 */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/40 to-transparent" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 h-full flex flex-col justify-center">
+    <div className="min-h-screen bg-[#f5f9fd]">
+      <section className="relative overflow-hidden border-b border-slate-200 bg-[#eaf5ff] bg-cover bg-center" style={{ backgroundImage: "linear-gradient(90deg, rgba(234,245,255,0.98) 0%, rgba(234,245,255,0.88) 48%, rgba(234,245,255,0.28) 100%), url('/images/archive-atmosphere-v1.png')" }}>
+        <div className="absolute -right-12 -top-20 h-64 w-64 rounded-full border-[28px] border-white/35" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10">
           {/* 面包屑 */}
-          <nav className="flex items-center gap-2 text-sm text-gray-500 mb-4">
-            <Link href="/" className="hover:text-emerald-600 transition-colors duration-200">{t('category.breadcrumb.home')}</Link>
+          <nav className="flex items-center gap-2 text-sm text-slate-500 mb-5">
+            <Link href="/" className="hover:text-sky-700 transition-colors duration-200">{t('category.breadcrumb.home')}</Link>
             <span className="text-gray-300">/</span>
             <span className="text-gray-600">{category.name}</span>
           </nav>
 
           {/* 分类信息 */}
           <div className="flex items-center gap-4">
-            <div className={`w-14 h-14 ${config.bg} rounded-2xl flex items-center justify-center shadow-sm`}>
+            <div className={`w-14 h-14 ${config.bg} rounded-2xl flex items-center justify-center shadow-sm ring-1 ring-white`}>
               <span className="text-2xl">{config.icon}</span>
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-800">{category.name}</h1>
-              <p className="text-gray-500 mt-1 text-sm">
+              <p className="text-xs font-bold tracking-[0.16em] text-sky-700">CATALOG / 分类资料库</p><h1 className="mt-1 text-3xl font-bold text-slate-800">{category.name}</h1>
+              <p className="text-slate-500 mt-1 text-sm">
                 {t('category.stats', { name: category.name, count: total })}
               </p>
-              <p className="text-gray-400 text-sm mt-0.5">{category.description || t('category.desc')}</p>
+              <p className="text-slate-400 text-sm mt-0.5">{category.description || t('category.desc')}</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 主内容区域 - 白色背景带顶部圆弧 */}
-      <div className="bg-white rounded-t-[40px] -mt-6 relative z-10 pt-6">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 py-8"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-6">
           {/* 左侧筛选面板 */}
           <aside className="lg:w-56 flex-shrink-0">
@@ -110,12 +100,12 @@ export default function CategoryContent({
           <main className="flex-1 min-w-0">
             {/* 结果统计 + 排序/视图 */}
             <div className="flex items-center justify-between mb-5">
-              <p className="text-gray-500 text-sm">
+              <p className="text-slate-500 text-sm">
                 {t('category.found', { count: total })}
               </p>
               <div className="flex items-center gap-3">
                 {/* 排序 */}
-                <div className="flex items-center gap-1.5 text-sm text-gray-500">
+                <div className="flex items-center gap-1.5 text-sm text-slate-500">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -127,12 +117,12 @@ export default function CategoryContent({
 
                 {/* 视图切换 */}
                 <div className="flex gap-1">
-                  <button className="w-9 h-9 bg-emerald-500 text-white rounded-lg flex items-center justify-center shadow-sm">
+                  <button className="w-9 h-9 bg-[#17324d] text-white rounded-lg flex items-center justify-center shadow-sm">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                     </svg>
                   </button>
-                  <button className="w-9 h-9 bg-gray-100 text-gray-400 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors">
+                  <button className="w-9 h-9 bg-slate-100 text-slate-400 rounded-lg flex items-center justify-center hover:bg-slate-200 transition-colors">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                     </svg>
@@ -160,10 +150,10 @@ export default function CategoryContent({
                 )}
               </>
             ) : (
-              <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
+              <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
                 <span className="text-6xl mb-4 block">📭</span>
-                <h3 className="text-xl font-medium text-gray-700 mb-2">{t('category.noResults')}</h3>
-                <p className="text-gray-400">{t('category.adjustFilters')}</p>
+                <h3 className="text-xl font-medium text-slate-700 mb-2">{t('category.noResults')}</h3>
+                <p className="text-slate-400">{t('category.adjustFilters')}</p>
               </div>
             )}
           </main>

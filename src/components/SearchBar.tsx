@@ -25,7 +25,7 @@ export default function SearchBar({ placeholder, large = false }: SearchBarProps
 
   return (
     <form onSubmit={handleSearch} className="w-full">
-      <div className={`glass flex items-center rounded-2xl shadow-lg overflow-hidden ${large ? 'p-2' : 'p-1.5'}`}>
+      <div className={`flex items-center rounded-2xl border border-slate-200 bg-white shadow-lg shadow-sky-100 overflow-hidden ${large ? 'p-2' : 'p-1.5'}`}>
         <input
           type="text"
           value={query}
@@ -37,7 +37,7 @@ export default function SearchBar({ placeholder, large = false }: SearchBarProps
         />
         <button
           type="submit"
-          className={`btn-sheen bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white font-medium transition-all duration-300 shadow-md hover:shadow-lg ${
+          className={`bg-[#17324d] hover:bg-[#254c70] text-white font-medium transition-all duration-300 shadow-md hover:shadow-lg ${
             large ? 'px-8 py-3 text-lg' : 'px-6 py-2.5 text-sm'
           } rounded-xl`}
         >

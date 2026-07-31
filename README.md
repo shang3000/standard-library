@@ -13,6 +13,26 @@
 - 中英文界面、分类筛选、搜索、个人下载历史与后台管理。
 - CI 与自动化测试：GitHub Actions 自动执行依赖安装、单元测试和生产构建。
 
+## 界面预览
+
+### 资料检索首页
+
+![标准文库首页：检索入口、资料统计、分类浏览与最新归档](public/images/showcase/home.png)
+
+### 分类资料库
+
+![行业标准分类页：资料筛选、格式标签与档案卡片](public/images/showcase/category.png)
+
+### 受控资料详情
+
+![资料详情页：文件信息、访问规则与下载入口](public/images/showcase/document-detail.png)
+
+### 资料运营后台
+
+![后台仪表盘：资料、文件、用户与下载数据概览](public/images/showcase/admin-dashboard.png)
+
+> 截图基于本地 MySQL 演示数据生成。后台数据看板、资料目录和上传流程均为真实业务页面，不是静态原型。
+
 ## 架构
 
 ```text

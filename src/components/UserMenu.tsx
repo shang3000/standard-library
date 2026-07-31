@@ -65,7 +65,7 @@ export default function UserMenu() {
         </Link>
         <Link
           href="/register"
-          className="px-5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-full transition-all duration-200 text-sm shadow-sm"
+          className="px-5 py-2 bg-[#17324d] hover:bg-[#254c70] text-white font-medium rounded-full transition-all duration-200 text-sm shadow-sm"
         >
           {t('user.register')}
         </Link>
@@ -78,7 +78,7 @@ export default function UserMenu() {
       {/* 我的文档按钮 */}
       <Link
         href="/profile"
-        className="hidden sm:flex items-center gap-2 px-4 py-2 border border-emerald-500 text-emerald-600 hover:bg-emerald-50 rounded-full transition-all duration-200 text-sm font-medium"
+        className="hidden sm:flex items-center gap-2 px-4 py-2 border border-sky-300 text-sky-700 hover:bg-sky-50 rounded-full transition-all duration-200 text-sm font-medium"
       >
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -111,7 +111,7 @@ export default function UserMenu() {
           <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50 overflow-hidden">
             <Link
               href="/profile"
-              className="block px-4 py-2.5 text-sm text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 transition-all duration-200"
+              className="block px-4 py-2.5 text-sm text-gray-600 hover:bg-sky-50 hover:text-sky-700 transition-all duration-200"
               onClick={() => setShowMenu(false)}
             >
               {t('user.profile')}

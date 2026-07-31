@@ -42,13 +42,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen mesh-bg flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
+    <div className="min-h-screen bg-[#f5f9fd] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
       {/* 装饰圆形 */}
-      <div className="absolute top-20 left-20 w-40 h-40 bg-emerald-300/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-20 w-60 h-60 bg-green-200/20 rounded-full blur-3xl" />
+      <div className="absolute top-20 left-20 w-40 h-40 bg-sky-200/40 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-20 w-60 h-60 bg-blue-100/50 rounded-full blur-3xl" />
 
       <div className="max-w-md w-full relative z-10 animate-fade-in-up">
-        <div className="glass-strong rounded-3xl shadow-xl p-8">
+        <div className="rounded-3xl border border-slate-200 bg-white shadow-xl p-8">
           <div className="text-center mb-8">
             <span className="text-5xl mb-4 block">📚</span>
             <h1 className="text-2xl font-bold text-gray-800">{t('login.title')}</h1>
@@ -95,7 +95,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 btn-sheen bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-[#17324d] hover:bg-[#254c70] text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? t('login.logging') : t('login.button')}
             </button>
@@ -104,7 +104,7 @@ export default function LoginPage() {
           <div className="mt-6 text-center">
             <p className="text-gray-400 text-sm">
               {t('login.noAccount')}{' '}
-              <Link href="/register" className="text-primary hover:text-primary-dark font-medium transition-colors duration-200">
+              <Link href="/register" className="text-sky-700 hover:text-sky-900 font-medium transition-colors duration-200">
                 {t('login.registerNow')}
               </Link>
             </p>

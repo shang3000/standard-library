@@ -27,12 +27,12 @@ export default function SearchContent({
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen mesh-bg">
+    <div className="min-h-screen bg-[#f5f9fd]">
       {/* Search Header */}
-      <div className="py-10 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-emerald-300/20 rounded-full blur-3xl" />
+      <div className="border-b border-slate-200 bg-[#eaf5ff] py-10 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-sky-200/30 rounded-full blur-3xl" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <h1 className="text-2xl font-bold text-gradient mb-4">{t('search.title')}</h1>
+          <p className="text-xs font-bold tracking-[0.18em] text-sky-700">STANDARD ARCHIVE</p><h1 className="mt-2 text-2xl font-bold text-slate-800 mb-4">{t('search.title')}</h1>
           <SearchBar large placeholder={t('search.placeholder')} />
         </div>
       </div>
