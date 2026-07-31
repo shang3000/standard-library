@@ -1,36 +1,42 @@
-# 标准文库 - 专业标准文档分享平台
-🌐 在线演示：（如果有部署的话放 Vercel 链接，没有就算了）
-📖 本项目是一个面向中文开发者的全栈开源模板，展示如何在无传统数据库的情况下，使用 sql.js 在 Vercel 等 Serverless 平台部署完整应用。
-一个基于 Next.js 16 构建的标准文档分享网站，提供行业标准、国家标准、国际标准等各类标准文档的查阅与下载服务。
+# 标准文库
 
-## ✨ 功能特性
+面向标准与合规资料管理的全栈文档平台。项目围绕“管理员维护文档、用户按权限获取资料、系统可追溯下载行为”构建，适合作为 Next.js + MySQL 工程化作品集项目。
 
-### 前台功能
-- 📚 文档浏览 - 按分类浏览标准文档
-- 🔍 搜索功能 - 支持文档标题、描述搜索
-- 🏷️ 分类筛选 - 按格式、VIP状态、排序方式筛选
-- 📄 文档详情 - 查看文档详细信息
-- ⬇️ 下载系统 - 星币下载、VIP免费下载
-- 👤 用户系统 - 注册、登录、个人中心
-- ⭐ 星币系统 - 注册赠送星币，下载扣费
-- 👑 VIP会员 - VIP专享文档、免费下载付费文档
+## 项目亮点
 
-### 后台管理
-- 🔐 密码保护 - 环境变量配置管理密码
-- 📋 文档管理 - 查看、删除文档
-- ➕ 添加文档 - 新增标准文档
-- 👥 用户管理 - 查看用户列表
+- MySQL + Prisma 持久化：分类、文档、用户、VIP、星币与下载记录具有关联约束与迁移历史。
+- 安全的服务端鉴权：JWT HttpOnly Cookie；后台接口在服务端校验管理员身份。
+- 真实文件闭环：后台上传 PDF / Word / Excel / PPT，文件私有存储；下载时二次检查登录、VIP 与兑换记录。
+- 文件生命周期管理：显示文件状态、编辑文档、替换源文件，删除文档时清理对应私有文件。
+- 中英文界面、分类筛选、搜索、个人下载历史与后台管理。
+- CI 与自动化测试：GitHub Actions 自动执行依赖安装、单元测试和生产构建。
 
-## 🛠️ 技术栈
+## 架构
 
-- **框架**: Next.js 16 (App Router)
-- **语言**: TypeScript
-- **样式**: Tailwind CSS v4
-- **数据库**: SQLite (sql.js - 纯JS实现，无需编译)
-- **认证**: JWT (jose) + httpOnly Cookie
-- **密码**: bcryptjs 加密
+```text
+Browser
+  │
+  ▼
+Next.js App Router
+  ├── Server Components / Route Handlers
+  ├── JWT + HttpOnly Cookies
+  ├── Prisma data access layer
+  └── Private local document storage (development)
+          │
+          ▼
+      MySQL 8.0
+```
 
-## 🚀 本地运行
+> 本地文件存储用于开发与作品展示。部署到 Serverless 平台时，请将 `src/lib/document-storage.ts` 替换为对象存储实现（如 Vercel Blob、OSS 或 COS）。
+
+## 技术栈
+
+- Next.js 16、React 19、TypeScript、Tailwind CSS 4
+- MySQL 8 + Prisma ORM 7
+- jose、bcryptjs
+- Vitest、GitHub Actions
+
+## 本地启动
 
 ### 1. 安装依赖
 
@@ -40,170 +46,72 @@ npm install
 
 ### 2. 配置环境变量
 
-复制 `.env.example` 为 `.env.local`，填入你的配置：
+复制 `.env.example` 为 `.env.local`，填写本机配置：
 
-```bash
-cp .env.example .env.local
+```env
+DATABASE_URL="mysql://用户名:密码@localhost:3306/standard_library"
+JWT_SECRET="请使用随机强密钥"
+ADMIN_PASSWORD="后台管理密码"
 ```
 
-环境变量说明：
-- `JWT_SECRET` - JWT 加密密钥（请使用随机强密码）
-- `ADMIN_PASSWORD` - 后台管理密码
-
-### 3. 初始化数据库
+### 3. 应用数据库迁移
 
 ```bash
-npm run db:init
+npx prisma migrate deploy
+npx prisma generate
 ```
 
-这会创建数据库表结构并插入测试数据，包括：
-- 6个文档分类
-- 50+ 测试文档
-- 2个测试用户：
-  - 普通用户：`test` / `123456`（100星币）
-  - VIP用户：`vipuser` / `123456`（500星币）
+如果要从旧 SQLite 演示数据导入一次性数据：
 
-### 4. 启动开发服务器
+```bash
+npm run db:import
+```
+
+### 4. 启动
 
 ```bash
 npm run dev
 ```
 
-访问 http://localhost:3000 查看网站。
+访问 `http://localhost:3000`，后台入口为 `/admin`。
 
-## 📦 项目结构
-
-```
-standard-library/
-├── src/
-│   ├── app/
-│   │   ├── about/           # 关于我们页面
-│   │   ├── admin/           # 后台管理页面
-│   │   ├── api/             # API 路由
-│   │   │   ├── admin/       # 后台管理 API
-│   │   │   ├── auth/        # 认证 API（登录/注册/退出）
-│   │   │   ├── download/    # 下载 API
-│   │   │   └── profile/     # 用户信息 API
-│   │   ├── category/        # 分类页面
-│   │   ├── doc/             # 文档详情页面
-│   │   ├── login/           # 登录页面
-│   │   ├── register/        # 注册页面
-│   │   ├── profile/         # 个人中心
-│   │   └── search/          # 搜索页面
-│   ├── components/          # React 组件
-│   ├── lib/                 # 工具库
-│   │   ├── auth.ts          # 认证工具
-│   │   ├── db.ts            # 数据库连接
-│   │   ├── queries.ts       # 数据库查询
-│   │   ├── schema.ts        # 数据库结构
-│   │   └── seed.ts          # 种子数据
-│   └── types/               # TypeScript 类型定义
-├── data/                    # SQLite 数据库文件
-├── public/                  # 静态资源
-│   └── images/              # 背景图片
-├── .env.example             # 环境变量示例
-├── .env.local               # 环境变量（不提交到Git）
-└── package.json
-```
-
-## 🌐 部署
-
-### Vercel 一键部署
-
-1. Fork 本项目到你的 GitHub
-2. 在 [Vercel](https://vercel.com) 导入项目
-3. 配置环境变量：
-   - `JWT_SECRET` - 你的JWT密钥
-   - `ADMIN_PASSWORD` - 管理员密码
-4. 点击部署
-
-**注意**: Vercel 使用 Serverless 环境，SQLite 数据库会在每次冷启动后重置。生产环境建议使用持久化数据库（如 PlanetScale、Turso 等）。
-
-### 腾讯云手动部署
-
-#### 1. 服务器准备
+## 常用命令
 
 ```bash
-# 安装 Node.js 18+
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# 安装 PM2
-npm install -g pm2
+npm run test             # 运行单元测试
+npm run build            # 生产构建与类型检查
+npm run lint             # ESLint 检查
+npm run db:import        # 从旧 SQLite 导入一次性数据
+npx prisma studio        # 可视化查看 MySQL 数据
 ```
 
-#### 2. 上传项目
+## 文件与权限流程
 
-```bash
-# 克隆项目
-git clone <your-repo-url>
-cd standard-library
-
-# 安装依赖
-npm install
-
-# 配置环境变量
-cp .env.example .env.local
-# 编辑 .env.local 填入真实值
-
-# 初始化数据库
-npm run db:init
-
-# 构建项目
-npm run build
+```text
+管理员上传文件
+  → 服务端校验格式、MIME 类型和 20MB 大小限制
+  → 写入私有 storage/documents 与 MySQL 元数据
+  → 用户点击下载
+  → 登录 / VIP / 星币校验
+  → 记录下载并返回受控文件流
 ```
 
-#### 3. 启动服务
+## 自动化质量门禁
 
-```bash
-# 使用 PM2 启动
-pm2 start npm --name "standard-library" -- start
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) 会在 push 和 Pull Request 时执行：
 
-# 保存 PM2 配置
-pm2 save
+1. `npm ci`
+2. `npm run test`
+3. `npm run build`
 
-# 设置开机自启
-pm2 startup
-```
+## 后续规划
 
-#### 4. Nginx 配置（可选）
+- 将本地文件存储抽象并接入云对象存储
+- 标准版本、现行/废止状态与关联标准图谱
+- 下载与合规数据仪表盘
+- 基于引用页码的文档问答
 
-```nginx
-server {
-    listen 80;
-    server_name your-domain.com;
+## 安全说明
 
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
-```
-
-## 📝 环境变量说明
-
-| 变量名 | 说明 | 默认值 |
-|--------|------|--------|
-| `JWT_SECRET` | JWT 加密密钥 | `standard-library-secret-key-2024` |
-| `ADMIN_PASSWORD` | 后台管理密码 | `admin123` |
-
-## 🧪 测试账号
-
-| 用户名 | 密码 | 类型 | 星币 |
-|--------|------|------|------|
-| `test` | `123456` | 普通用户 | 100 |
-| `vipuser` | `123456` | VIP用户 | 500 |
-
-## 📄 License
-
-MIT
-
-## 🙏 致谢
-
-- [Next.js](https://nextjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [sql.js](https://sql.js.org/)
+- `.env.local`、本地上传文件、生成客户端和旧 SQLite 备份均已被 Git 忽略。
+- 不要将数据库连接串、JWT 密钥或后台密码提交到仓库。

@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/src/generated/
 /.pnp
 .pnp.*
 .yarn/*
@@ -31,8 +32,11 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files
+.env
 .env.local
+.env.*
 .env*.local
+!.env.example
 
 # temp files
 *.txt
@@ -50,5 +54,8 @@ CLAUDE.md
 next-env.d.ts
 
 # database
-# data/*.db
-# data/*.sqlite
+data/*.db
+data/*.sqlite
+
+# local document uploads
+/storage/

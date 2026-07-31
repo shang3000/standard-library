@@ -17,6 +17,7 @@ export interface Document {
   title: string;
   category: string;
   categorySlug: string;
+  categoryId?: string;
   format: DocFormat;
   price: number; // 0 表示免费
   isVip: boolean;

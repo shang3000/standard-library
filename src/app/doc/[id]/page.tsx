@@ -16,7 +16,7 @@ export default async function DocDetailPage({ params }: DocDetailPageProps) {
     notFound();
   }
 
-  const relatedDocs = await getRelatedDocuments(Number(doc.id), doc.id, 4);
+  const relatedDocs = await getRelatedDocuments(Number(doc.categoryId), doc.id, 4);
 
   return <DocDetailContent document={doc} relatedDocs={relatedDocs} />;
 }

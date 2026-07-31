@@ -1,115 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth';
-import { getDb, saveDb } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 
 export async function POST(request: NextRequest) {
   try {
-    // 检查登录状态
-    const user = await getCurrentUser();
-    if (!user) {
-      return NextResponse.json(
-        { error: '请先登录' },
-        { status: 401 }
-      );
-    }
-
+    const currentUser = await getCurrentUser();
+    if (!currentUser) return NextResponse.json({ error: '请先登录' }, { status: 401 });
     const { docId } = await request.json();
-    if (!docId) {
-      return NextResponse.json(
-        { error: '文档 ID 无效' },
-        { status: 400 }
-      );
-    }
+    const id = Number(docId);
+    if (!Number.isInteger(id) || id < 1) return NextResponse.json({ error: '文档 ID 无效' }, { status: 400 });
 
-    const db = await getDb();
-
-    // 获取文档信息
-    const docResult = db.exec(
-      'SELECT id, title, format, price_stars, is_vip, file_size FROM documents WHERE id = ?',
-      [Number(docId)]
-    );
-
-    if (docResult.length === 0 || docResult[0].values.length === 0) {
-      return NextResponse.json(
-        { error: '文档不存在' },
-        { status: 404 }
-      );
-    }
-
-    const doc = docResult[0].values[0];
-    const docIdNum = doc[0] as number;
-    const docTitle = doc[1] as string;
-    const docFormat = doc[2] as string;
-    const priceStars = doc[3] as number;
-    const isVip = Boolean(doc[4]);
-    const fileSize = doc[5] as string;
-
-    // VIP 文档检查
-    if (isVip && !user.isVip) {
-      return NextResponse.json(
-        { error: '这是 VIP 专享文档，请先开通 VIP' },
-        { status: 403 }
-      );
-    }
-
-    // 付费文档检查星币
-    if (priceStars > 0 && !isVip) {
-      // VIP 用户免费下载付费文档
-      if (!user.isVip) {
-        // 检查星币余额
-        if (user.starsBalance < priceStars) {
-          return NextResponse.json(
-            { error: `星币余额不足，需要 ${priceStars} 星币，当前余额 ${user.starsBalance} 星币` },
-            { status: 400 }
-          );
-        }
-
-        // 扣除星币
-        db.run(
-          'UPDATE users SET stars_balance = stars_balance - ? WHERE id = ?',
-          [priceStars, user.id]
-        );
-      }
-    }
-
-    // 增加下载次数
-    db.run(
-      'UPDATE documents SET download_count = download_count + 1 WHERE id = ?',
-      [docIdNum]
-    );
-
-    // 记录下载
-    db.run(
-      'INSERT INTO downloads (doc_id, user_id, stars_paid) VALUES (?, ?, ?)',
-      [docIdNum, user.id, user.isVip ? 0 : priceStars]
-    );
-
-    saveDb();
-
-    // 获取更新后的用户余额
-    const userResult = db.exec(
-      'SELECT stars_balance FROM users WHERE id = ?',
-      [user.id]
-    );
-    const newBalance = userResult[0]?.values[0]?.[0] as number || 0;
-
-    return NextResponse.json({
-      success: true,
-      message: '下载成功',
-      download: {
-        docId: docIdNum,
-        title: docTitle,
-        format: docFormat,
-        fileSize: fileSize,
-        starsPaid: user.isVip ? 0 : priceStars,
-      },
-      newBalance,
+    const result = await prisma.$transaction(async (tx) => {
+      const [document, user] = await Promise.all([tx.document.findUnique({ where: { id } }), tx.user.findUnique({ where: { id: currentUser.id } })]);
+      if (!document) throw new Error('NOT_FOUND');
+      if (!document.storageKey) throw new Error('FILE_UNAVAILABLE');
+      if (!user) throw new Error('UNAUTHORIZED');
+      if (document.isVip && !user.isVip) throw new Error('VIP_ONLY');
+      const starsPaid = user.isVip ? 0 : document.priceStars;
+      if (starsPaid > user.starsBalance) throw new Error('INSUFFICIENT_STARS');
+      const updatedUser = starsPaid > 0 ? await tx.user.update({ where: { id: user.id }, data: { starsBalance: { decrement: starsPaid } } }) : user;
+      await tx.document.update({ where: { id }, data: { downloadCount: { increment: 1 } } });
+      await tx.download.create({ data: { docId: id, userId: user.id, starsPaid } });
+      return { document, newBalance: updatedUser.starsBalance, starsPaid };
     });
+    return NextResponse.json({ success: true, message: '下载成功', download: { docId: result.document.id, title: result.document.title, format: result.document.format, fileSize: result.document.fileSize, starsPaid: result.starsPaid }, newBalance: result.newBalance });
   } catch (error) {
+    const message = error instanceof Error ? error.message : '';
+    const errors: Record<string, [string, number]> = { NOT_FOUND: ['文档不存在', 404], FILE_UNAVAILABLE: ['该文档暂未上传源文件', 404], UNAUTHORIZED: ['请先登录', 401], VIP_ONLY: ['这是 VIP 专享文档，请先开通 VIP', 403], INSUFFICIENT_STARS: ['星币余额不足', 400] };
+    if (errors[message]) return NextResponse.json({ error: errors[message][0] }, { status: errors[message][1] });
     console.error('Download error:', error);
-    return NextResponse.json(
-      { error: '下载失败，请重试' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: '下载失败，请重试' }, { status: 500 });
   }
 }

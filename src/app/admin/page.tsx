@@ -13,6 +13,8 @@ interface Document {
   priceStars: number;
   downloadCount: number;
   isVip: boolean;
+  description: string;
+  hasFile: boolean;
   uploadTime: string;
 }
 
@@ -47,6 +49,9 @@ export default function AdminPage() {
     description: '',
     isVip: false,
   });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [editingDocument, setEditingDocument] = useState<Document | null>(null);
+  const [replacementFile, setReplacementFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -129,11 +134,14 @@ export default function AdminPage() {
     setMessage({ type: '', text: '' });
 
     try {
-      const response = await fetch('/api/admin/documents', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newDoc),
-      });
+      if (!selectedFile) {
+        setMessage({ type: 'error', text: '请选择要上传的文件' });
+        return;
+      }
+      const formData = new FormData();
+      Object.entries(newDoc).forEach(([key, value]) => formData.append(key, String(value)));
+      formData.append('file', selectedFile);
+      const response = await fetch('/api/admin/documents', { method: 'POST', body: formData });
 
       if (response.ok) {
         setMessage({ type: 'success', text: t('admin.addSuccess') });
@@ -147,6 +155,7 @@ export default function AdminPage() {
           description: '',
           isVip: false,
         });
+        setSelectedFile(null);
         fetchDocuments();
       } else {
         const data = await response.json();
@@ -154,6 +163,27 @@ export default function AdminPage() {
       }
     } catch {
       setMessage({ type: 'error', text: t('admin.addFailedRetry') });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateDocument = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingDocument) return;
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      Object.entries(editingDocument).forEach(([key, value]) => formData.append(key, String(value)));
+      if (replacementFile) formData.append('file', replacementFile);
+      const response = await fetch(`/api/admin/documents/${editingDocument.id}`, { method: 'PATCH', body: formData });
+      if (!response.ok) throw new Error((await response.json()).error || '更新失败');
+      setMessage({ type: 'success', text: '文档已更新' });
+      setEditingDocument(null);
+      setReplacementFile(null);
+      fetchDocuments();
+    } catch (error) {
+      setMessage({ type: 'error', text: error instanceof Error ? error.message : '更新失败' });
     } finally {
       setLoading(false);
     }
@@ -340,6 +370,9 @@ export default function AdminPage() {
                             <span className="text-sm font-medium text-gray-700">
                               {doc.title}
                             </span>
+                            <span className={`ml-2 px-2 py-0.5 text-xs rounded-full ${doc.hasFile ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                              {doc.hasFile ? '已上传文件' : '缺少文件'}
+                            </span>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -361,6 +394,9 @@ export default function AdminPage() {
                           {doc.downloadCount}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <button onClick={() => { setEditingDocument(doc); setReplacementFile(null); }} className="mr-3 text-primary hover:text-primary-dark transition-colors duration-200">
+                            编辑
+                          </button>
                           <button
                             onClick={() => handleDeleteDocument(doc.id)}
                             className="text-red-400 hover:text-red-600 transition-colors duration-200"
@@ -445,16 +481,15 @@ export default function AdminPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-1.5">
-                    {t('admin.addForm.fileSizeLabel')}
-                  </label>
+                  <label className="block text-sm font-medium text-gray-600 mb-1.5">上传文件 *</label>
                   <input
-                    type="text"
-                    value={newDoc.fileSize}
-                    onChange={(e) => setNewDoc({ ...newDoc, fileSize: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200 placeholder-gray-400"
-                    placeholder={t('admin.addForm.fileSizePlaceholder')}
+                    type="file"
+                    required
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+                    onChange={(e) => setSelectedFile(e.target.files?.[0] ?? null)}
+                    className="w-full px-4 py-2.5 bg-white/50 border border-gray-200/60 rounded-xl focus:outline-none input-glow transition-all duration-200"
                   />
+                  <p className="mt-1 text-xs text-gray-400">支持 PDF、Word、Excel、PPT，单个文件不超过 20MB</p>
                 </div>
 
                 <div>
@@ -577,6 +612,24 @@ export default function AdminPage() {
           </div>
         )}
       </div>
+      {editingDocument && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/35 p-4">
+          <form onSubmit={handleUpdateDocument} className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between"><h2 className="text-xl font-bold text-gray-800">编辑文档</h2><button type="button" onClick={() => setEditingDocument(null)} className="text-gray-400 hover:text-gray-700">关闭</button></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input required value={editingDocument.title} onChange={(e) => setEditingDocument({ ...editingDocument, title: e.target.value })} className="rounded-xl border border-gray-200 px-3 py-2" placeholder="文档标题" />
+              <select value={editingDocument.category} onChange={(e) => setEditingDocument({ ...editingDocument, category: e.target.value })} className="rounded-xl border border-gray-200 px-3 py-2"><option value="行业标准">行业标准</option><option value="国家标准">国家标准</option><option value="国际标准">国际标准</option><option value="企业标准">企业标准</option><option value="地方标准">地方标准</option><option value="团体标准">团体标准</option></select>
+              <select value={editingDocument.format} onChange={(e) => setEditingDocument({ ...editingDocument, format: e.target.value })} className="rounded-xl border border-gray-200 px-3 py-2"><option>PDF</option><option>DOC</option><option>XLS</option><option>PPT</option></select>
+              <input type="number" min="0" value={editingDocument.pages} onChange={(e) => setEditingDocument({ ...editingDocument, pages: Number(e.target.value) })} className="rounded-xl border border-gray-200 px-3 py-2" placeholder="页数" />
+              <input type="number" min="0" value={editingDocument.priceStars} onChange={(e) => setEditingDocument({ ...editingDocument, priceStars: Number(e.target.value) })} className="rounded-xl border border-gray-200 px-3 py-2" placeholder="星币价格" />
+              <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" onChange={(e) => setReplacementFile(e.target.files?.[0] ?? null)} className="rounded-xl border border-gray-200 px-3 py-2" />
+            </div>
+            <textarea value={editingDocument.description} onChange={(e) => setEditingDocument({ ...editingDocument, description: e.target.value })} className="w-full rounded-xl border border-gray-200 px-3 py-2" rows={4} placeholder="文档描述" />
+            <label className="flex items-center gap-2 text-sm text-gray-600"><input type="checkbox" checked={editingDocument.isVip} onChange={(e) => setEditingDocument({ ...editingDocument, isVip: e.target.checked })} /> VIP 专享</label>
+            <div className="flex justify-end gap-3"><button type="button" onClick={() => setEditingDocument(null)} className="rounded-xl px-4 py-2 text-gray-600">取消</button><button disabled={loading} className="rounded-xl bg-primary px-5 py-2 text-white disabled:opacity-50">保存修改</button></div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

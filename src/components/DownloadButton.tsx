@@ -61,6 +61,7 @@ export default function DownloadButton({ docId, price, isVip }: DownloadButtonPr
       setSuccess(data.message || t('download.success'));
       // 刷新页面更新下载次数
       router.refresh();
+      window.location.assign(`/api/files/${docId}`);
     } catch {
       setError(t('download.failedRetry'));
     } finally {

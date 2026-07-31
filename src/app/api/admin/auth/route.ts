@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createAdminToken, setAdminCookie } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
     const { password } = await request.json();
-    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    const adminPassword = process.env.ADMIN_PASSWORD;
 
-    if (password === adminPassword) {
-      return NextResponse.json({ success: true });
+    if (adminPassword && password === adminPassword) {
+      const response = NextResponse.json({ success: true });
+      return setAdminCookie(response, await createAdminToken());
     }
 
     return NextResponse.json(

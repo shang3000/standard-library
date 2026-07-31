@@ -1,86 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb, saveDb } from '@/lib/db';
+import { isAdmin } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { saveDocumentFile, validateDocumentFile } from '@/lib/document-storage';
+
+export const runtime = 'nodejs';
 
 export async function GET() {
   try {
-    const db = await getDb();
-    const result = db.exec(`
-      SELECT
-        d.id, d.title, c.name as category, d.format, d.pages,
-        d.file_size, d.price_stars, d.download_count, d.is_vip, d.upload_time
-      FROM documents d
-      LEFT JOIN categories c ON d.category_id = c.id
-      ORDER BY d.id DESC
-    `);
-
-    if (result.length === 0) {
-      return NextResponse.json({ documents: [] });
-    }
-
-    const documents = result[0].values.map((row: unknown[]) => ({
-      id: row[0] as number,
-      title: row[1] as string,
-      category: row[2] as string,
-      format: row[3] as string,
-      pages: row[4] as number,
-      fileSize: row[5] as string,
-      priceStars: row[6] as number,
-      downloadCount: row[7] as number,
-      isVip: Boolean(row[8]),
-      uploadTime: row[9] as string,
-    }));
-
-    return NextResponse.json({ documents });
+    if (!(await isAdmin())) return NextResponse.json({ error: '未授权' }, { status: 401 });
+    const documents = await prisma.document.findMany({ include: { category: { select: { name: true } } }, orderBy: { id: 'desc' } });
+    return NextResponse.json({ documents: documents.map((doc) => ({ id: doc.id, title: doc.title, category: doc.category.name, format: doc.format, pages: doc.pages, fileSize: doc.fileSize ?? '', priceStars: doc.priceStars, downloadCount: doc.downloadCount, isVip: doc.isVip, description: doc.description ?? '', uploadTime: doc.uploadTime.toISOString(), hasFile: Boolean(doc.storageKey) })) });
   } catch (error) {
     console.error('Fetch documents error:', error);
-    return NextResponse.json(
-      { error: '获取文档列表失败' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: '获取文档列表失败' }, { status: 500 });
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const { title, category, format, pages, fileSize, priceStars, description, isVip } =
-      await request.json();
-
-    // 验证必填字段
-    if (!title) {
-      return NextResponse.json(
-        { error: '请填写文档标题' },
-        { status: 400 }
-      );
-    }
-
-    const db = await getDb();
-
-    // 获取分类 ID
-    const catResult = db.exec('SELECT id FROM categories WHERE name = ?', [category]);
-    if (catResult.length === 0 || catResult[0].values.length === 0) {
-      return NextResponse.json(
-        { error: '分类不存在' },
-        { status: 400 }
-      );
-    }
-
-    const categoryId = catResult[0].values[0][0] as number;
-
-    // 插入文档
-    db.run(
-      `INSERT INTO documents (title, category_id, format, pages, file_size, price_stars, download_count, upload_time, description, is_vip)
-       VALUES (?, ?, ?, ?, ?, ?, 0, datetime('now'), ?, ?)`,
-      [title, categoryId, format, pages, fileSize, priceStars, description, isVip ? 1 : 0]
-    );
-
-    saveDb();
-
-    return NextResponse.json({ success: true, message: '文档添加成功' });
+    if (!(await isAdmin())) return NextResponse.json({ error: '未授权' }, { status: 401 });
+    const formData = await request.formData();
+    const title = String(formData.get('title') ?? '').trim();
+    const category = String(formData.get('category') ?? '');
+    const format = String(formData.get('format') ?? '');
+    const file = formData.get('file');
+    if (!title || !category || !['PDF', 'DOC', 'PPT', 'XLS'].includes(format)) return NextResponse.json({ error: '请填写有效的文档信息' }, { status: 400 });
+    if (!(file instanceof File)) return NextResponse.json({ error: '请选择要上传的文档文件' }, { status: 400 });
+    validateDocumentFile(file, format);
+    const targetCategory = await prisma.category.findUnique({ where: { name: category } });
+    if (!targetCategory) return NextResponse.json({ error: '分类不存在' }, { status: 400 });
+    const stored = await saveDocumentFile(file);
+    await prisma.document.create({ data: { title, categoryId: targetCategory.id, format, pages: Math.max(0, Number(formData.get('pages')) || 0), fileSize: stored.fileSize, storageKey: stored.storageKey, originalName: stored.originalName, mimeType: stored.mimeType, priceStars: Math.max(0, Number(formData.get('priceStars')) || 0), description: String(formData.get('description') ?? '') || null, isVip: formData.get('isVip') === 'true' } });
+    return NextResponse.json({ success: true, message: '文档上传成功' });
   } catch (error) {
-    console.error('Add document error:', error);
-    return NextResponse.json(
-      { error: '添加文档失败' },
-      { status: 500 }
-    );
+    const message = error instanceof Error ? error.message : '上传文档失败';
+    console.error('Upload document error:', error);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

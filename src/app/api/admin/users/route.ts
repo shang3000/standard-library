@@ -1,34 +1,14 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import { isAdmin } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-    const db = await getDb();
-    const result = db.exec(`
-      SELECT id, username, email, is_vip, stars_balance, created_at
-      FROM users
-      ORDER BY id DESC
-    `);
-
-    if (result.length === 0) {
-      return NextResponse.json({ users: [] });
-    }
-
-    const users = result[0].values.map((row: unknown[]) => ({
-      id: row[0] as number,
-      username: row[1] as string,
-      email: row[2] as string,
-      isVip: Boolean(row[3]),
-      starsBalance: row[4] as number,
-      createdAt: row[5] as string,
-    }));
-
-    return NextResponse.json({ users });
+    if (!(await isAdmin())) return NextResponse.json({ error: '未授权' }, { status: 401 });
+    const users = await prisma.user.findMany({ orderBy: { id: 'desc' } });
+    return NextResponse.json({ users: users.map((user) => ({ id: user.id, username: user.username, email: user.email ?? '', isVip: user.isVip, starsBalance: user.starsBalance, createdAt: user.createdAt.toISOString() })) });
   } catch (error) {
     console.error('Fetch users error:', error);
-    return NextResponse.json(
-      { error: '获取用户列表失败' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: '获取用户列表失败' }, { status: 500 });
   }
 }
