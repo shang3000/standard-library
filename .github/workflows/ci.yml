@@ -8,6 +8,10 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    # CI 不读取本机 .env.local；这里只提供构建和测试所需的非生产占位值。
+    env:
+      JWT_SECRET: ci-only-jwt-secret-not-for-production-2026
+      ADMIN_PASSWORD: ci-only-admin-password
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v7
