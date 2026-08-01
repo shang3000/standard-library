@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdmin } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
 import { deleteDocumentFile, saveDocumentFile, validateDocumentFile } from '@/lib/document-storage';
+import { deleteAdminDocument, getCategoryByName, getStoredDocument, updateAdminDocument } from '@/lib/sqljs-repository';
 
 export const runtime = 'nodejs';
 
@@ -13,9 +13,10 @@ async function getDocumentId(params: Promise<{ id: string }>) {
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     if (!(await isAdmin())) return NextResponse.json({ error: '未授权' }, { status: 401 });
+    if (process.env.VERCEL) return NextResponse.json({ error: '线上演示模式不保存资料修改，请在本地或接入持久化服务后使用。' }, { status: 409 });
     const id = await getDocumentId(params);
     if (!id) return NextResponse.json({ error: '文档 ID 无效' }, { status: 400 });
-    const existing = await prisma.document.findUnique({ where: { id } });
+    const existing = await getStoredDocument(id);
     if (!existing) return NextResponse.json({ error: '文档不存在' }, { status: 404 });
 
     const formData = await request.formData();
@@ -24,25 +25,14 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     const format = String(formData.get('format') ?? '');
     const file = formData.get('file');
     if (!title || !category || !['PDF', 'DOC', 'PPT', 'XLS'].includes(format)) return NextResponse.json({ error: '请填写有效的文档信息' }, { status: 400 });
-    const targetCategory = await prisma.category.findUnique({ where: { name: category } });
+    const targetCategory = await getCategoryByName(category);
     if (!targetCategory) return NextResponse.json({ error: '分类不存在' }, { status: 400 });
 
     const replacement = file instanceof File && file.size > 0 ? file : null;
     if (replacement) validateDocumentFile(replacement, format);
     const stored = replacement ? await saveDocumentFile(replacement) : null;
-    const document = await prisma.document.update({
-      where: { id },
-      data: {
-        title,
-        categoryId: targetCategory.id,
-        format,
-        pages: Math.max(0, Number(formData.get('pages')) || 0),
-        priceStars: Math.max(0, Number(formData.get('priceStars')) || 0),
-        description: String(formData.get('description') ?? '') || null,
-        isVip: formData.get('isVip') === 'true',
-        ...(stored ? { fileSize: stored.fileSize, storageKey: stored.storageKey, originalName: stored.originalName, mimeType: stored.mimeType } : {}),
-      },
-    });
+    const document = await updateAdminDocument(id, { title, categoryId: Number(targetCategory.id), format: format as 'PDF' | 'DOC' | 'PPT' | 'XLS', pages: Math.max(0, Number(formData.get('pages')) || 0), priceStars: Math.max(0, Number(formData.get('priceStars')) || 0), description: String(formData.get('description') ?? ''), isVip: formData.get('isVip') === 'true', ...(stored ? { fileSize: stored.fileSize, storageKey: stored.storageKey, originalName: stored.originalName, mimeType: stored.mimeType } : {}) });
+    if (!document) return NextResponse.json({ error: '文档不存在' }, { status: 404 });
     if (stored && existing.storageKey) await deleteDocumentFile(existing.storageKey);
     return NextResponse.json({ success: true, message: '文档已更新', document: { id: document.id, hasFile: Boolean(document.storageKey) } });
   } catch (error) {
@@ -54,11 +44,12 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     if (!(await isAdmin())) return NextResponse.json({ error: '未授权' }, { status: 401 });
+    if (process.env.VERCEL) return NextResponse.json({ error: '线上演示模式不保存资料修改，请在本地或接入持久化服务后使用。' }, { status: 409 });
     const id = await getDocumentId(params);
     if (!id) return NextResponse.json({ error: '文档 ID 无效' }, { status: 400 });
-    const document = await prisma.document.findUnique({ where: { id } });
+    const document = await getStoredDocument(id);
     if (!document) return NextResponse.json({ error: '文档不存在' }, { status: 404 });
-    await prisma.document.delete({ where: { id } });
+    await deleteAdminDocument(id);
     if (document.storageKey) await deleteDocumentFile(document.storageKey);
     return NextResponse.json({ success: true, message: '文档已删除' });
   } catch (error) {

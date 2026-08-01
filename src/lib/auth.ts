@@ -3,7 +3,7 @@ import 'server-only';
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { prisma } from './prisma';
+import { getStoredUserByEmail, getStoredUserById, getStoredUserByUsername } from './sqljs-repository';
 
 const jwtSecret = process.env.JWT_SECRET;
 if (!jwtSecret) throw new Error('JWT_SECRET is not configured.');
@@ -20,8 +20,8 @@ export interface User {
   createdAt: string;
 }
 
-function toUser(user: { id: number; username: string; email: string | null; isVip: boolean; starsBalance: number; createdAt: Date }): User {
-  return { id: user.id, username: user.username, email: user.email ?? '', isVip: user.isVip, starsBalance: user.starsBalance, createdAt: user.createdAt.toISOString() };
+function toUser(user: { id: number; username: string; email: string | null; isVip: boolean; starsBalance: number; createdAt: string }): User {
+  return { id: user.id, username: user.username, email: user.email ?? '', isVip: user.isVip, starsBalance: user.starsBalance, createdAt: user.createdAt };
 }
 
 export async function createToken(userId: number) {
@@ -41,7 +41,7 @@ export async function getCurrentUser(): Promise<User | null> {
   if (!token) return null;
   const payload = await verifyToken(token);
   if (!payload || typeof payload.userId !== 'number') return null;
-  const user = await prisma.user.findUnique({ where: { id: payload.userId } });
+  const user = await getStoredUserById(payload.userId);
   return user ? toUser(user) : null;
 }
 
@@ -64,9 +64,9 @@ export function setAdminCookie(response: NextResponse, token: string) {
 export function clearAuthCookie(response: NextResponse) { response.cookies.delete(COOKIE_NAME); return response; }
 
 export async function findUserByUsername(username: string) {
-  return prisma.user.findUnique({ where: { username } });
+  return getStoredUserByUsername(username);
 }
 
 export async function findUserByEmail(email: string) {
-  return prisma.user.findUnique({ where: { email } });
+  return getStoredUserByEmail(email);
 }

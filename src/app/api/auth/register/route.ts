@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { Prisma } from '@/generated/prisma/client';
-import { prisma } from '@/lib/prisma';
 import { findUserByEmail, findUserByUsername, createToken, setAuthCookie } from '@/lib/auth';
+import { createStoredUser } from '@/lib/sqljs-repository';
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,13 +13,11 @@ export async function POST(request: NextRequest) {
     if (await findUserByUsername(username)) return NextResponse.json({ error: '用户名已被占用' }, { status: 400 });
     if (await findUserByEmail(email)) return NextResponse.json({ error: '邮箱已被注册' }, { status: 400 });
 
-    const user = await prisma.user.create({
-      data: { username, email, passwordHash: await bcrypt.hash(password, 10), starsBalance: 50 },
-    });
+    const user = await createStoredUser({ username, email, passwordHash: await bcrypt.hash(password, 10) });
+    if (!user) throw new Error('创建用户失败');
     const response = NextResponse.json({ success: true, user: { id: user.id, username: user.username, email: user.email, isVip: user.isVip, starsBalance: user.starsBalance } });
     return setAuthCookie(response, await createToken(user.id));
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') return NextResponse.json({ error: '用户名或邮箱已被注册' }, { status: 400 });
     console.error('Register error:', error);
     return NextResponse.json({ error: '注册失败，请重试' }, { status: 500 });
   }

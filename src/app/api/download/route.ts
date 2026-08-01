@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { redeemDownload } from '@/lib/sqljs-repository';
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,19 +10,7 @@ export async function POST(request: NextRequest) {
     const id = Number(docId);
     if (!Number.isInteger(id) || id < 1) return NextResponse.json({ error: '文档 ID 无效' }, { status: 400 });
 
-    const result = await prisma.$transaction(async (tx) => {
-      const [document, user] = await Promise.all([tx.document.findUnique({ where: { id } }), tx.user.findUnique({ where: { id: currentUser.id } })]);
-      if (!document) throw new Error('NOT_FOUND');
-      if (!document.storageKey) throw new Error('FILE_UNAVAILABLE');
-      if (!user) throw new Error('UNAUTHORIZED');
-      if (document.isVip && !user.isVip) throw new Error('VIP_ONLY');
-      const starsPaid = user.isVip ? 0 : document.priceStars;
-      if (starsPaid > user.starsBalance) throw new Error('INSUFFICIENT_STARS');
-      const updatedUser = starsPaid > 0 ? await tx.user.update({ where: { id: user.id }, data: { starsBalance: { decrement: starsPaid } } }) : user;
-      await tx.document.update({ where: { id }, data: { downloadCount: { increment: 1 } } });
-      await tx.download.create({ data: { docId: id, userId: user.id, starsPaid } });
-      return { document, newBalance: updatedUser.starsBalance, starsPaid };
-    });
+    const result = await redeemDownload(id, currentUser.id);
     return NextResponse.json({ success: true, message: '下载成功', download: { docId: result.document.id, title: result.document.title, format: result.document.format, fileSize: result.document.fileSize, starsPaid: result.starsPaid }, newBalance: result.newBalance });
   } catch (error) {
     const message = error instanceof Error ? error.message : '';

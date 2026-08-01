@@ -8,11 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "db:init": "tsx src/lib/seed.ts",
     "prisma:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:import": "tsx src/lib/import-sqlite-to-mysql.ts",
-    "postinstall": "prisma generate"
+    "db:import": "tsx src/lib/import-sqlite-to-mysql.ts"
   },
   "dependencies": {
     "@prisma/adapter-mariadb": "^7.9.1",

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
 import { readDocumentFile } from '@/lib/document-storage';
+import { getStoredDocument, hasDownload } from '@/lib/sqljs-repository';
 
 export const runtime = 'nodejs';
 
@@ -11,11 +11,11 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
     if (!user) return NextResponse.json({ error: '请先登录' }, { status: 401 });
     const id = Number((await params).id);
     if (!Number.isInteger(id) || id < 1) return NextResponse.json({ error: '文档 ID 无效' }, { status: 400 });
-    const document = await prisma.document.findUnique({ where: { id } });
+    const document = await getStoredDocument(id);
     if (!document?.storageKey || !document.originalName) return NextResponse.json({ error: '该文档暂未上传源文件' }, { status: 404 });
     if (document.isVip && !user.isVip) return NextResponse.json({ error: '这是 VIP 专享文档' }, { status: 403 });
     if (document.priceStars > 0 && !user.isVip) {
-      const purchased = await prisma.download.findFirst({ where: { docId: id, userId: user.id } });
+      const purchased = await hasDownload(id, user.id);
       if (!purchased) return NextResponse.json({ error: '请先完成下载兑换' }, { status: 403 });
     }
     const bytes = await readDocumentFile(document.storageKey);
