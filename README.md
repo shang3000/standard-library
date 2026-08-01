@@ -100,7 +100,7 @@ SQL.js 在此项目中定位为“无外部服务的演示数据层”。Serverl
 
 ## 接入 MySQL（生产扩展）
 
-当客户需要多实例共享数据、长期保存用户与下载记录时，建议切换至 MySQL 8，并将文件存储替换为对象存储（如 S3、COS 或 OSS）。仓库保留了 `prisma/schema.prisma` 和迁移记录，方便以现有的数据模型继续扩展。
+当客户需要多实例共享数据、长期保存用户与下载记录时，建议切换至 MySQL 8，并将文件存储替换为对象存储（如 S3、COS 或 OSS）。当前仓库刻意不携带 MySQL 运行依赖，确保演示部署保持零数据库配置。
 
 1. 创建 MySQL 数据库，并在 `.env.local` 或部署平台配置：
 
@@ -108,14 +108,16 @@ SQL.js 在此项目中定位为“无外部服务的演示数据层”。Serverl
    DATABASE_URL="mysql://用户名:密码@主机:3306/standard_library"
    ```
 
-2. 执行现有迁移并生成 Prisma Client：
+2. 在生产分支安装 Prisma 并建立迁移：
 
    ```powershell
-   npx prisma migrate deploy
-   npx prisma generate
+   npm install @prisma/client @prisma/adapter-mariadb dotenv
+   npm install -D prisma
+   npx prisma init
+   npx prisma migrate dev --name init
    ```
 
-3. 将 `src/lib/sqljs-repository.ts` 替换为对应的 Prisma Repository 实现；现有 `prisma/` 目录中的模型字段可直接作为资料、用户、下载记录的数据契约。
+3. 将 `src/lib/sqljs-repository.ts` 替换为对应的 Prisma Repository 实现，保持资料、用户、下载记录这三类数据模型和现有接口返回结构不变。
 
 4. 将 `src/lib/document-storage.ts` 改为对象存储适配器，并把 `storageKey`、原始文件名和 MIME 类型写入 MySQL。下载接口继续使用现有的鉴权与权限校验逻辑即可。
 
